@@ -1,1 +1,1 @@
-# Manufacturing-Logistics-Ripples-Training
+# Manufacturing-Logistics-Ripples-Training-UI
