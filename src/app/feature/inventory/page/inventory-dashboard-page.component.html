@@ -1,0 +1,39 @@
+<div class="inventory-dashboard">
+  <app-page-header 
+    title="Inventory Dashboard" 
+    description="Live stock indices, tracking indicators and capacity thresholds."
+  >
+  </app-page-header>
+  
+  @if (loading) {
+    <app-loader text="Loading stock indexes..."></app-loader>
+  }
+  
+  @if (!loading) {
+    <div class="row g-4">
+      <div class="col-12 col-md-4">
+        <div class="card text-center">
+          <h4 class="text-muted text-uppercase mb-2" style="font-size: 0.8rem;">Total Racked Items</h4>
+          <h2 class="text-bold" style="font-size: 2rem; color: var(--color-primary);">{{ totalQuantity }} Units</h2>
+          <p class="m-0" style="font-size: 0.85rem;">Across all categories</p>
+        </div>
+      </div>
+      
+      <div class="col-12 col-md-4">
+        <div class="card text-center">
+          <h4 class="text-muted text-uppercase mb-2" style="font-size: 0.8rem;">Stock Value</h4>
+          <h2 class="text-bold" style="font-size: 2rem; color: var(--color-success);">{{ totalValue | currency }}</h2>
+          <p class="m-0" style="font-size: 0.85rem;">Valued at unit cost price</p>
+        </div>
+      </div>
+      
+      <div class="col-12 col-md-4">
+        <div class="card text-center">
+          <h4 class="text-muted text-uppercase mb-2" style="font-size: 0.8rem;">Warehouse Capacity</h4>
+          <h2 class="text-bold" style="font-size: 2rem; color: var(--color-warning);">72%</h2>
+          <p class="m-0" style="font-size: 0.85rem;">Utilized volume vs maximum</p>
+        </div>
+      </div>
+    </div>
+  }
+</div>

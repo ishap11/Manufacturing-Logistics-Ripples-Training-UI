@@ -1,0 +1,18 @@
+<div class="empty-state-container">
+  <div class="empty-state-icon">
+    <i [class]="'fas ' + icon"></i>
+  </div>
+  <h3 class="empty-state-title">{{ title }}</h3>
+  <p class="empty-state-description">{{ description }}</p>
+  
+  @if (actionLabel) {
+    <div class="empty-state-actions">
+      <button type="button" class="btn btn-primary" (click)="onActionClicked()">
+        @if (actionIcon) {
+          <i [class]="'fas ' + actionIcon"></i>
+        }
+        {{ actionLabel }}
+      </button>
+    </div>
+  }
+</div>

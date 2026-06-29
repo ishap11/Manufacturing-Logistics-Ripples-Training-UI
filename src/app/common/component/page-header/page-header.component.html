@@ -1,0 +1,18 @@
+<div class="page-header-container">
+  <div class="header-breadcrumb-row">
+    <app-breadcrumb [items]="breadcrumbs"></app-breadcrumb>
+  </div>
+  
+  <div class="header-main-row">
+    <div class="header-titles">
+      <h1 class="page-title">{{ title }}</h1>
+      @if (description) {
+        <p class="page-description">{{ description }}</p>
+      }
+    </div>
+    
+    <div class="header-actions">
+      <ng-content select="[actions]"></ng-content>
+    </div>
+  </div>
+</div>

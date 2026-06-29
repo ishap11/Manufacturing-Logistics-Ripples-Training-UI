@@ -1,0 +1,57 @@
+<div class="transfers-container">
+  <app-page-header 
+    title="Internal Stock Transfers" 
+    description="Logs of inventory allocations, bin-to-bin movements, and transfers simulations."
+  >
+    <div actions>
+      <button class="btn btn-primary" (click)="simulateTransfer()">
+        <i class="fas fa-random mr-1"></i> Simulate Bin Transfer
+      </button>
+    </div>
+  </app-page-header>
+  
+  @if (loading) {
+    <app-loader text="Loading transfers history..."></app-loader>
+  }
+  
+  @if (!loading) {
+    <div class="card">
+      @if (transfers.length > 0) {
+        <div class="table-responsive" style="border: none; margin: 0;">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>SKU Code</th>
+                <th>Source Bin</th>
+                <th>Destination Bin</th>
+                <th class="text-right">Qty Moved</th>
+                <th>Timestamp</th>
+                <th class="text-center">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (t of transfers; track t.id) {
+                <tr>
+                  <td class="text-bold text-muted">{{ t.sku }}</td>
+                  <td class="text-bold text-danger">{{ t.sourceBin }}</td>
+                  <td class="text-bold text-success">{{ t.destBin }}</td>
+                  <td class="text-right text-bold">{{ t.quantity }} units</td>
+                  <td>{{ t.timestamp }}</td>
+                  <td class="text-center">
+                    <app-status-badge [status]="t.status"></app-status-badge>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <app-empty-state 
+          icon="fa-exchange-alt"
+          title="No Transfers Recorded"
+          description="No internal stock transfers have been logged in the distribution center database yet."
+        ></app-empty-state>
+      }
+    </div>
+  }
+</div>

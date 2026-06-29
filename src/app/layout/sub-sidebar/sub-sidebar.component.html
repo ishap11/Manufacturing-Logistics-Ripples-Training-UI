@@ -1,0 +1,24 @@
+@if (hasLinks) {
+  <div class="sub-sidebar-container">
+    <div class="sub-sidebar-header">
+      <h3 class="module-title">{{ moduleTitle }}</h3>
+    </div>
+    
+    <div class="sub-sidebar-nav">
+      <ul class="sub-nav-list">
+        @for (link of links; track link.route) {
+          <li class="sub-nav-item">
+            <a 
+              [routerLink]="link.route" 
+              routerLinkActive="active" 
+              class="sub-nav-link"
+            >
+              <span class="sub-nav-icon"><i [class]="'fas ' + link.icon"></i></span>
+              <span class="sub-nav-label">{{ link.label }}</span>
+            </a>
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+}

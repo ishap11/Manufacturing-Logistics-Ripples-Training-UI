@@ -1,0 +1,50 @@
+<div class="sidebar-inner d-flex flex-column h-100">
+  <!-- Sidebar Toggle Header inside Sidebar -->
+  <div class="sidebar-toggle-section d-flex align-items-center" [class.justify-content-center]="collapsed" [class.justify-content-between]="!collapsed">
+    @if (!collapsed) {
+      <span class="brand-subtext">NAVIGATION</span>
+    }
+    <button type="button" class="sidebar-toggle-btn" (click)="onToggleCollapse()">
+      <i class="fas" [class.fa-chevron-left]="!collapsed" [class.fa-chevron-right]="collapsed"></i>
+    </button>
+  </div>
+
+  <!-- Navigation groups -->
+  <div class="sidebar-nav-groups flex-1">
+    @for (group of groups; track group.name) {
+      <div class="nav-group">
+        @if (!collapsed) {
+          <div class="group-header">{{ group.name }}</div>
+        } @else {
+          <div class="group-divider"></div>
+        }
+        
+        <ul class="nav-list">
+          @for (item of group.items; track item.id) {
+            <li class="nav-item">
+              <a 
+                [routerLink]="item.route" 
+                routerLinkActive="active" 
+                [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' || item.route === '/supplier' || item.route === '/inventory' }"
+                (click)="onItemClick(item, $event)"
+                class="nav-link"
+                [class.has-children]="item.hasChildren"
+                [title]="collapsed ? item.label : ''"
+              >
+                <span class="nav-icon"><i [class]="'fas ' + item.icon"></i></span>
+                @if (!collapsed) {
+                  <span class="nav-label">{{ item.label }}</span>
+                }
+                @if (!collapsed && item.hasChildren) {
+                  <span class="nav-children-indicator">
+                    <i class="fas fa-chevron-right"></i>
+                  </span>
+                }
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+    }
+  </div>
+</div>

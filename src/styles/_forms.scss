@@ -1,0 +1,190 @@
+.form-group {
+  margin-bottom: var(--spacing-md);
+  
+  label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: var(--spacing-xs);
+    color: var(--color-text);
+  }
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--color-text);
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  font-family: inherit;
+  outline: none;
+
+  &:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+  }
+
+  &::placeholder {
+    color: var(--color-text-secondary);
+    opacity: 0.7;
+  }
+
+  &:disabled, &[readonly] {
+    background-color: #F1F5F9;
+    opacity: 1;
+    color: var(--color-text-secondary);
+    cursor: not-allowed;
+  }
+}
+
+textarea.form-control {
+  min-height: 80px;
+  resize: vertical;
+}
+
+// Select custom styling (without default browser styling)
+select.form-control {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px;
+  padding-right: 2.25rem;
+}
+
+// Buttons
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  font-family: inherit;
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 0.55rem 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-decoration: none;
+  outline: none;
+  white-space: nowrap;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: #fff;
+  
+  &:hover:not(:disabled) {
+    background-color: var(--color-primary-hover);
+  }
+}
+
+.btn-secondary {
+  background-color: #F1F5F9;
+  border-color: var(--color-border);
+  color: var(--color-text);
+  
+  &:hover:not(:disabled) {
+    background-color: #E2E8F0;
+  }
+}
+
+.btn-success {
+  background-color: var(--color-success);
+  color: #fff;
+  
+  &:hover:not(:disabled) {
+    background-color: #16A34A;
+  }
+}
+
+.btn-danger {
+  background-color: var(--color-danger);
+  color: #fff;
+  
+  &:hover:not(:disabled) {
+    background-color: #DC2626;
+  }
+}
+
+.btn-outline {
+  background-color: transparent;
+  border-color: var(--color-border);
+  color: var(--color-text-secondary);
+  
+  &:hover:not(:disabled) {
+    background-color: #F8FAFC;
+    color: var(--color-text);
+  }
+}
+
+.btn-icon {
+  padding: 0.5rem;
+  border-radius: var(--radius-md);
+  
+  i {
+    font-size: 0.95rem;
+  }
+}
+
+// Checkboxes and Radios
+.form-check {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+  
+  input[type="checkbox"], input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    cursor: pointer;
+    accent-color: var(--color-primary);
+  }
+  
+  label {
+    margin: 0;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--color-text);
+  }
+}
+
+// Input Group
+.input-group {
+  display: flex;
+  position: relative;
+  width: 100%;
+  
+  .form-control {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    flex: 1;
+  }
+  
+  .btn, .input-group-text {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left: none;
+  }
+  
+  .input-group-text {
+    display: flex;
+    align-items: center;
+    background-color: #F8FAFC;
+    border: 1px solid var(--color-border);
+    border-left: none;
+    padding: 0 0.75rem;
+    color: var(--color-text-secondary);
+  }
+}

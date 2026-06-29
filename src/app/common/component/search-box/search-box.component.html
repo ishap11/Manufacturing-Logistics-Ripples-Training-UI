@@ -1,0 +1,20 @@
+<div class="search-box-container" [style.max-width]="maxWidth">
+  <span class="search-icon"><i class="fas fa-search"></i></span>
+  <input 
+    type="text" 
+    class="form-control search-input" 
+    [placeholder]="placeholder"
+    [(ngModel)]="searchQuery"
+    (ngModelChange)="onSearchChanged($event)"
+  />
+  @if (searchQuery) {
+    <button 
+      type="button" 
+      class="clear-button" 
+      (click)="clearSearch()"
+      aria-label="Clear search"
+    >
+      <i class="fas fa-times"></i>
+    </button>
+  }
+</div>
