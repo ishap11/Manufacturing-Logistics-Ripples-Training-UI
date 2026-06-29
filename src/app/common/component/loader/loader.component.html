@@ -1,0 +1,15 @@
+@if (fullscreen) {
+  <div class="loader-overlay">
+    <div class="loader-spinner"></div>
+    @if (text) {
+      <div class="loader-text">{{ text }}</div>
+    }
+  </div>
+} @else {
+  <div class="loader-inline">
+    <div class="loader-spinner spinner-sm"></div>
+    @if (text) {
+      <span class="loader-text">{{ text }}</span>
+    }
+  </div>
+}

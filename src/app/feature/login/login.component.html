@@ -1,0 +1,118 @@
+<div class="login-page-container">
+  <div class="login-card shadow-xl">
+    <!-- Left Side: Product Branding Illustration -->
+    <div class="login-brand-side">
+      <div class="brand-badge">
+        <i class="fas fa-cubes-stacked brand-badge-icon"></i>
+        <span class="brand-badge-text">DC IMS</span>
+      </div>
+      
+      <div class="illustration-container">
+        <div class="isometric-warehouse">
+          <div class="crate crate-1"><i class="fas fa-box"></i></div>
+          <div class="crate crate-2"><i class="fas fa-box-open"></i></div>
+          <div class="crate crate-3"><i class="fas fa-pallet"></i></div>
+          <div class="crate crate-4"><i class="fas fa-truck-flatbed"></i></div>
+        </div>
+      </div>
+      
+      <div class="brand-message">
+        <h2>Supply Chain OS</h2>
+        <p>Real-time analytics, inventory lifecycle tracking, and smart warehouse logistics orchestration.</p>
+      </div>
+    </div>
+    
+    <!-- Right Side: Login Form -->
+    <div class="login-form-side">
+      @if (loading) {
+        <app-loader [fullscreen]="false" text="Authenticating..."></app-loader>
+      }
+      
+      <div class="form-header">
+        <h1>Welcome Back 👋</h1>
+        <p>Sign in to continue to your enterprise account</p>
+      </div>
+      
+      @if (errorMessage) {
+        <div class="alert alert-danger">
+          <i class="fas fa-exclamation-circle mr-2"></i>
+          {{ errorMessage }}
+        </div>
+      }
+      
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="form-group-parent">
+        <!-- Email/Username -->
+        <div class="form-group mb-3">
+          <label for="username">Email Address or Username</label>
+          <div class="input-icon-group">
+            <span class="field-icon"><i class="fas fa-user"></i></span>
+            <input 
+              type="text" 
+              id="username" 
+              formControlName="username" 
+              class="form-control login-input" 
+              placeholder="Enter 'admin'"
+              [class.is-invalid]="submitted && f['username'].errors"
+            />
+          </div>
+          @if (submitted && f['username'].errors) {
+            <div class="invalid-feedback">
+              Username or email is required.
+            </div>
+          }
+        </div>
+        
+        <!-- Password -->
+        <div class="form-group mb-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <label for="password">Password</label>
+            <a href="javascript:void(0)" class="forgot-link">Forgot Password?</a>
+          </div>
+          <div class="input-icon-group">
+            <span class="field-icon"><i class="fas fa-lock"></i></span>
+            <input 
+              type="password" 
+              id="password" 
+              formControlName="password" 
+              class="form-control login-input" 
+              placeholder="Enter 'admin'"
+              [class.is-invalid]="submitted && f['password'].errors"
+            />
+          </div>
+          @if (submitted && f['password'].errors) {
+            <div class="invalid-feedback">
+              Password is required.
+            </div>
+          }
+        </div>
+        
+        <!-- Remember me -->
+        <div class="form-check justify-content-between mb-4">
+          <div class="d-flex align-items-center gap-2">
+            <input type="checkbox" id="rememberMe" formControlName="rememberMe" />
+            <label for="rememberMe" class="remember-label">Remember Me</label>
+          </div>
+        </div>
+        
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-login w-100">
+          Sign In
+        </button>
+      </form>
+      
+      <div class="social-divider">
+        <span>OR CONTINUE WITH</span>
+      </div>
+      
+      <div class="social-login-row">
+        <button class="social-btn" title="Sign in with Google"><i class="fab fa-google"></i></button>
+        <button class="social-btn" title="Sign in with GitHub"><i class="fab fa-github"></i></button>
+        <button class="social-btn" title="Sign in with LinkedIn"><i class="fab fa-linkedin-in"></i></button>
+      </div>
+      
+      <div class="form-footer">
+        Don't have an account? <a href="javascript:void(0)" class="register-link">Register</a>
+      </div>
+    </div>
+  </div>
+</div>

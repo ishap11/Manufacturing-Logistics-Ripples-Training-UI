@@ -1,0 +1,57 @@
+<div class="stock-list-container">
+  <app-page-header 
+    title="Warehouse Stock Levels" 
+    description="Physical inventory quantities, warehouse rack locations, and reorder alerts."
+  >
+  </app-page-header>
+  
+  <div class="card p-3 mb-4">
+    <app-search-box 
+      placeholder="Search stock by SKU, product name or bin location..." 
+      (search)="onSearch($event)"
+    ></app-search-box>
+  </div>
+  
+  @if (loading) {
+    <app-loader text="Loading stock registry..."></app-loader>
+  }
+  
+  @if (!loading) {
+    <div class="card">
+      @if (filteredStock.length > 0) {
+        <div class="table-responsive" style="border: none; margin: 0;">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>SKU Code</th>
+                <th>Product Name</th>
+                <th>Bin Location</th>
+                <th class="text-right">Qty Available</th>
+                <th class="text-center">Stock Alert</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (s of filteredStock; track s.id) {
+                <tr>
+                  <td class="text-bold text-muted">{{ s.sku }}</td>
+                  <td class="text-bold text-primary">{{ s.name }}</td>
+                  <td class="text-bold">{{ s.binLocation }}</td>
+                  <td class="text-right text-bold">{{ s.quantity ?? s.onHandQuantity }} units</td>
+                  <td class="text-center">
+                    <app-status-badge [status]="(s.quantity ?? s.onHandQuantity) < 50 ? 'Low Stock' : 'Available'"></app-status-badge>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <app-empty-state 
+          icon="fa-boxes-stacked"
+          title="No Stock Found"
+          description="No inventory items matched your search query criteria."
+        ></app-empty-state>
+      }
+    </div>
+  }
+</div>

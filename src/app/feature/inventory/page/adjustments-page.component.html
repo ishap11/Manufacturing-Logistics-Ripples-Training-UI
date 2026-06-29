@@ -1,0 +1,52 @@
+<div class="adjustments-container">
+  <app-page-header 
+    title="Stock Adjustments Log" 
+    description="Filing, tracking and physical count reconciliation discrepancies records."
+  >
+  </app-page-header>
+  
+  @if (loading) {
+    <app-loader text="Loading adjustments log..."></app-loader>
+  }
+  
+  @if (!loading) {
+    <div class="card">
+      @if (adjustments.length > 0) {
+        <div class="table-responsive" style="border: none; margin: 0;">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>SKU Code</th>
+                <th>Reason Directive</th>
+                <th class="text-right">Adjustment Qty</th>
+                <th>Recorded Date</th>
+                <th class="text-center">Approval State</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (a of adjustments; track a.id) {
+                <tr>
+                  <td class="text-bold text-muted">{{ a.sku }}</td>
+                  <td>{{ a.reason }}</td>
+                  <td class="text-right text-bold" [ngClass]="(a.qtyAdjusted ?? 0) > 0 ? 'text-success' : 'text-danger'">
+                    {{ (a.qtyAdjusted ?? 0) > 0 ? '+' : '' }}{{ a.qtyAdjusted ?? 0 }} units
+                  </td>
+                  <td>{{ a.timestamp }}</td>
+                  <td class="text-center">
+                    <app-status-badge [status]="a.status ?? ''"></app-status-badge>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <app-empty-state 
+          icon="fa-sliders-h"
+          title="No Adjustments Logged"
+          description="No inventory discrepancies or stock adjustments have been filed yet."
+        ></app-empty-state>
+      }
+    </div>
+  }
+</div>

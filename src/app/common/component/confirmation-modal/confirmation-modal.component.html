@@ -1,0 +1,25 @@
+@if (isOpen) {
+  <div class="modal-overlay" (click)="onCancel()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="modal-title">{{ title }}</h3>
+        <button type="button" class="close-btn" (click)="onCancel()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <div class="modal-body">
+        <p class="modal-message">{{ message }}</p>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="onCancel()">
+          {{ cancelLabel }}
+        </button>
+        <button type="button" class="btn" [ngClass]="confirmClass" (click)="onConfirm()">
+          {{ confirmLabel }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

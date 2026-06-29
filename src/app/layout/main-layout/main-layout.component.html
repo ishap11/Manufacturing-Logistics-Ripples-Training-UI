@@ -1,0 +1,50 @@
+<div class="app-container">
+  <!-- Top Sticky Header -->
+  <div class="app-header">
+    <app-header (toggleMobile)="toggleMobileSidebar()"></app-header>
+  </div>
+  
+  <!-- Layout Core -->
+  <div class="app-body">
+    <!-- Sidebar Navigation Drawer -->
+    <aside 
+      class="app-sidebar" 
+      [class.collapsed]="isSidebarCollapsed" 
+      [class.expanded]="!isSidebarCollapsed"
+      [class.mobile-open]="isMobileOpen"
+    >
+      <app-sidebar 
+        [collapsed]="isSidebarCollapsed"
+        (toggleCollapse)="toggleSidebarCollapse()"
+        (moduleSelect)="onModuleSelected($event)"
+      ></app-sidebar>
+    </aside>
+    
+    <!-- Optional Sub-Sidebar for detailed category navigation -->
+    <aside 
+      class="app-sub-sidebar" 
+      [class.hidden]="!hasSubSidebar"
+      [class.mobile-open]="isMobileOpen && hasSubSidebar"
+    >
+      <app-sub-sidebar [activeModule]="activeModule"></app-sub-sidebar>
+    </aside>
+    
+    <!-- Backdrop overlay for mobile drawer -->
+    <div 
+      class="sidebar-overlay" 
+      [class.mobile-open]="isMobileOpen" 
+      (click)="closeMobileSidebar()"
+    ></div>
+    
+    <!-- Core Viewport & Footer Container -->
+    <div class="app-content-wrapper">
+      <main class="app-content">
+        <router-outlet></router-outlet>
+      </main>
+      
+      <div class="app-footer">
+        <app-footer></app-footer>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,50 @@
+<div class="cycle-count-container">
+  <app-page-header 
+    title="Cycle Count Audit Schedules" 
+    description="Ongoing cycles count tasks list and physical audits tracking details."
+  >
+  </app-page-header>
+  
+  @if (loading) {
+    <app-loader text="Loading cycle counts..."></app-loader>
+  }
+  
+  @if (!loading) {
+    <div class="card">
+      @if (cycles.length > 0) {
+        <div class="table-responsive" style="border: none; margin: 0;">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Audit Reference</th>
+                <th>Category Zone</th>
+                <th>Assigned Auditor</th>
+                <th>Scheduled Date</th>
+                <th class="text-center">Audit Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (c of cycles; track c.id) {
+                <tr>
+                  <td class="text-bold text-muted">{{ c.auditRef }}</td>
+                  <td class="text-bold text-primary">{{ c.category }}</td>
+                  <td>{{ c.auditor }}</td>
+                  <td>{{ c.scheduledDate }}</td>
+                  <td class="text-center">
+                    <app-status-badge [status]="c.status"></app-status-badge>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <app-empty-state 
+          icon="fa-list-check"
+          title="No Cycles Configured"
+          description="No physical audit schedules found."
+        ></app-empty-state>
+      }
+    </div>
+  }
+</div>
