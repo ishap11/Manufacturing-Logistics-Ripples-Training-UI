@@ -1,0 +1,84 @@
+<div class="container">
+
+    <h2>Fetch Purchase Orders Using Lazy Loading</h2>
+
+    <div
+        class="purchase-card"
+        *ngFor="let purchaseOrder of purchaseOrders">
+
+        <div class="header">
+
+            <h3>
+
+                Purchase Order #{{purchaseOrder.purchaseOrderIdPk}}
+
+            </h3>
+
+        </div>
+
+        <div class="details">
+
+            <span>
+
+                <strong>Purchase Order ID :</strong>
+
+                {{purchaseOrder.purchaseOrderIdPk}}
+
+            </span>
+
+            <span>
+
+                <strong>Supplier ID :</strong>
+
+                {{purchaseOrder.supplierIdFk}}
+
+            </span>
+
+        </div>
+
+        <h4>
+
+            Products
+
+        </h4>
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>S.No</th>
+
+                    <th>Product ID</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr
+                    *ngFor="let product of purchaseOrder.productIds; let i=index">
+
+                    <td>
+
+                        {{i+1}}
+
+                    </td>
+
+                    <td>
+
+                        {{product}}
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>

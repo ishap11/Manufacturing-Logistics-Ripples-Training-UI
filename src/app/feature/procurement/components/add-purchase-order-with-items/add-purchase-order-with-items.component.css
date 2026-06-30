@@ -1,0 +1,210 @@
+.card {
+
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+
+}
+
+h2 {
+
+    margin-bottom: 20px;
+    color: #333;
+
+}
+
+h3 {
+
+    margin: 20px 0 15px;
+    color: #444;
+
+}
+
+.form-grid {
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+
+}
+
+.form-group {
+
+    display: flex;
+    flex-direction: column;
+
+}
+
+label {
+
+    font-weight: 600;
+    margin-bottom: 6px;
+
+}
+
+input {
+
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+
+}
+
+input:focus {
+
+    outline: none;
+    border-color: #1976d2;
+
+}
+
+input.ng-invalid.ng-touched {
+
+    border-color: red;
+
+}
+
+.error {
+
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+
+}
+
+/* ---------- TABLE ---------- */
+
+table {
+
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+
+}
+
+thead {
+
+    background: #1976d2;
+    color: white;
+
+}
+
+th,
+td {
+
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+
+}
+
+tbody tr:nth-child(even) {
+
+    background: #f7f7f7;
+
+}
+
+tbody tr:hover {
+
+    background: #f2f2f2;
+
+}
+
+td input {
+
+    width: 100%;
+    padding: 8px;
+
+}
+
+/* ---------- BUTTONS ---------- */
+
+.add-btn {
+
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 15px;
+
+}
+
+.add-btn:hover {
+
+    background: #218838;
+
+}
+
+.remove-btn {
+
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+
+}
+
+.remove-btn:hover {
+
+    background: #c82333;
+
+}
+
+.button-container {
+
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 25px;
+
+}
+
+.button-container button {
+
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+
+}
+
+.button-container button[type="submit"] {
+
+    background: #1976d2;
+    color: white;
+
+}
+
+.button-container button[type="submit"]:hover {
+
+    background: #1565c0;
+
+}
+
+.button-container button[type="button"] {
+
+    background: gray;
+    color: white;
+
+}
+
+.button-container button[type="button"]:hover {
+
+    background: #555;
+
+}
+
+hr {
+
+    margin: 30px 0;
+    border: none;
+    border-top: 1px solid #ddd;
+
+}
