@@ -1,0 +1,96 @@
+<div class="card">
+
+    <h3>Fetch Dispatch By ID</h3>
+
+    <form [formGroup]="fetchForm">
+
+        <div class="form-group">
+
+            <label>
+                Dispatch ID <span>*</span>
+            </label>
+
+            <input
+                type="text"
+                placeholder="Enter Dispatch ID"
+                formControlName="dispatchId">
+
+            @if(fetchForm.get('dispatchId')?.touched &&
+                fetchForm.get('dispatchId')?.hasError('required')){
+
+                <small class="error">
+
+                    Dispatch ID is required.
+
+                </small>
+
+            }
+
+            @if(fetchForm.get('dispatchId')?.touched &&
+                fetchForm.get('dispatchId')?.hasError('pattern')){
+
+                <small class="error">
+
+                    Only numbers are allowed.
+
+                </small>
+
+            }
+
+        </div>
+
+        <div class="button-group">
+
+            <button
+                type="button"
+                class="search-btn"
+                (click)="search()">
+
+                Search
+
+            </button>
+
+            <button
+                type="button"
+                class="reset-btn"
+                (click)="reset()">
+
+                Reset
+
+            </button>
+
+        </div>
+
+    </form>
+
+    @if(selectedDispatch){
+
+    <div class="result-card">
+
+        <h4>Dispatch Details</h4>
+
+        <p><strong>Dispatch ID :</strong> {{selectedDispatch.dispatchId}}</p>
+
+        <p><strong>DC ID :</strong> {{selectedDispatch.dcId}}</p>
+
+        <p><strong>Store ID :</strong> {{selectedDispatch.storeId}}</p>
+
+        <p><strong>Dispatch Date :</strong> {{selectedDispatch.dispatchDate}}</p>
+
+        <p><strong>Status ID :</strong> {{selectedDispatch.statusId}}</p>
+
+    </div>
+
+    }
+
+    @if(noRecord){
+
+    <div class="no-record">
+
+        No dispatch record found.
+
+    </div>
+
+    }
+
+</div>

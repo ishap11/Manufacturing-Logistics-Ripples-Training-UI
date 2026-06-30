@@ -1,4 +1,75 @@
+<!--
 <div style="padding: 24px;">
   <h2>{{ title }}</h2>
   <p>{{ description }}</p>
+</div>
+-->
+<div class="dispatch-container">
+
+  <h2>{{ title }}</h2>
+  <p>{{ description }}</p>
+
+  <div class="tabs">
+
+    <div
+      class="tab"
+      [class.active]="selectedTab === 'add'"
+      (click)="selectedTab = 'add'">
+      Add Dispatch
+    </div>
+
+    <div
+      class="tab"
+      [class.active]="selectedTab === 'fetchAll'"
+      (click)="selectedTab = 'fetchAll'">
+      Fetch All
+    </div>
+
+    <div
+      class="tab"
+      [class.active]="selectedTab === 'fetchById'"
+      (click)="selectedTab = 'fetchById'">
+      Fetch By ID
+    </div>
+
+    <div
+      class="tab"
+      [class.active]="selectedTab === 'filter'"
+      (click)="selectedTab = 'filter'">
+      Filter by DC
+    </div>
+
+    <div
+      class="tab"
+      [class.active]="selectedTab === 'eager'"
+      (click)="selectedTab = 'eager'">
+      Eager Loading
+    </div>
+
+  </div>
+
+  <div class="tab-content">
+
+    @if(selectedTab === 'add'){
+    <mlp-add-dispatch></mlp-add-dispatch>
+}
+
+@if(selectedTab === 'fetchAll'){
+    <mlp-fetch-all-dispatch></mlp-fetch-all-dispatch>
+}
+
+@if(selectedTab === 'fetchById'){
+    <mlp-fetch-dispatch-by-id></mlp-fetch-dispatch-by-id>
+}
+
+@if(selectedTab === 'filter'){
+    <mlp-filter-by-dc-id></mlp-filter-by-dc-id>
+}
+
+@if(selectedTab === 'eager'){
+    <mlp-fetch-using-eagerloading></mlp-fetch-using-eagerloading>
+}
+
+  </div>
+
 </div>
