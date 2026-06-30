@@ -1,0 +1,82 @@
+<div class="store-page-container">
+  <app-page-header
+    title="Add New Store"
+    description="Create a new store profile with manager, address and status references."
+  ></app-page-header>
+
+  <div class="card p-3">
+    <form [formGroup]="storeForm" (ngSubmit)="addStore()" class="store-form">
+      <div class="form-grid">
+        <label class="form-field">
+          <span>Store Code</span>
+          <input type="text" formControlName="Store_Code" maxlength="20" placeholder="STR-015" />
+        </label>
+
+        <label class="form-field">
+          <span>Store Name</span>
+          <input type="text" formControlName="Store_Name" maxlength="100" placeholder="Central Plaza Store" />
+        </label>
+
+        <label class="form-field">
+          <span>Manager Id</span>
+          <input type="number" formControlName="Store_Manager_Id_Fk" placeholder="1015" />
+        </label>
+
+        <label class="form-field">
+          <span>Manager Name</span>
+          <input type="text" formControlName="managerName" placeholder="Store manager name" />
+        </label>
+
+        <label class="form-field">
+          <span>Address Id</span>
+          <input type="number" formControlName="Address_Id_FK" placeholder="515" />
+        </label>
+
+        <label class="form-field">
+          <span>Status Id</span>
+          <input type="number" formControlName="Store_Status_Id_FK" placeholder="1" />
+        </label>
+
+        <label class="form-field">
+          <span>City</span>
+          <input type="text" formControlName="city" placeholder="Dallas" />
+        </label>
+
+        <label class="form-field">
+          <span>Region</span>
+          <input type="text" formControlName="region" placeholder="South" />
+        </label>
+
+        <label class="form-field">
+          <span>Status</span>
+          <select formControlName="status">
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+            <option value="Pending">Pending</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="storeForm.reset({ Store_Status_Id_FK: 1, status: 'Active' })">
+          Clear
+        </button>
+        <button type="submit" class="btn btn-primary" [disabled]="saving">
+          <i class="fas fa-plus mr-1"></i> {{ saving ? 'Saving...' : 'Add Store' }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  @if (createdStore) {
+    <div class="card p-3 mt-3">
+      <div class="created-summary">
+        <div>
+          <div class="text-bold text-primary">{{ createdStore.Store_Name }}</div>
+          <div class="text-muted">{{ createdStore.Store_Code }} | Store Id {{ createdStore.Store_Id_PK }}</div>
+        </div>
+        <app-status-badge [status]="createdStore.status"></app-status-badge>
+      </div>
+    </div>
+  }
+</div>

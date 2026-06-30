@@ -40,6 +40,16 @@ export class SubSidebarComponent implements OnChanges {
         { label: 'Cycle Counting', route: '/inventory/cycle-count', icon: 'fa-list-check' },
         { label: 'Inventory Reports', route: '/inventory/reports', icon: 'fa-file-alt' }
       ]
+    },
+    store: {
+      title: 'Store Portal',
+      links: [
+        { label: 'Add New Store', route: '/store/add', icon: 'fa-plus' },
+        { label: 'Find Store', route: '/store/find', icon: 'fa-magnifying-glass' },
+        { label: 'Filter Stores', route: '/store/filter', icon: 'fa-filter' },
+        { label: 'Update Store Profile', route: '/store/update', icon: 'fa-pen-to-square' },
+        { label: 'Find All Stores', route: '/store/findall', icon: 'fa-list' }
+      ]
     }
   };
 

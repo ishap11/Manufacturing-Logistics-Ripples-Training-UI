@@ -1,0 +1,48 @@
+<div class="store-page-container">
+  <app-page-header
+    title="Find Store"
+    description="Search by store id, store code or store name."
+  ></app-page-header>
+
+  <div class="card p-3 mb-4">
+    <app-search-box
+      placeholder="Search store by id, code or name..."
+      (search)="findStore($event)"
+    ></app-search-box>
+  </div>
+
+  @if (loading) {
+    <app-loader text="Searching store registry..."></app-loader>
+  }
+
+  @if (!loading && store) {
+    <div class="card p-3">
+      <div class="store-detail">
+        <div>
+          <h3>{{ store.Store_Name }}</h3>
+          <p>{{ store.Store_Code }} | Store Id {{ store.Store_Id_PK }}</p>
+        </div>
+        <app-status-badge [status]="store.status"></app-status-badge>
+      </div>
+
+      <div class="detail-grid">
+        <div><span>Manager</span><strong>{{ store.managerName }}</strong></div>
+        <div><span>Manager Id</span><strong>{{ store.Store_Manager_Id_Fk }}</strong></div>
+        <div><span>Address Id</span><strong>{{ store.Address_Id_FK }}</strong></div>
+        <div><span>Status Id</span><strong>{{ store.Store_Status_Id_FK }}</strong></div>
+        <div><span>City</span><strong>{{ store.city }}</strong></div>
+        <div><span>Region</span><strong>{{ store.region }}</strong></div>
+        <div><span>Created</span><strong>{{ store.Created_DateTime }}</strong></div>
+        <div><span>Updated</span><strong>{{ store.Updated_DateTime }}</strong></div>
+      </div>
+    </div>
+  }
+
+  @if (!loading && searched && !store) {
+    <app-empty-state
+      icon="fa-store-slash"
+      title="Store Not Found"
+      description="No store matched the id, code or name you searched for."
+    ></app-empty-state>
+  }
+</div>

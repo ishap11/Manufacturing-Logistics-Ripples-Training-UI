@@ -31,7 +31,7 @@ export class SidebarComponent {
       items: [
         { id: 'supplier', label: 'Suppliers', icon: 'fa-truck', route: '/supplier', hasChildren: true },
         { id: 'product-master', label: 'Product Master', icon: 'fa-boxes-packing', route: '/product-master' },
-        { id: 'store', label: 'Stores', icon: 'fa-store', route: '/store' }
+        { id: 'store', label: 'Stores', icon: 'fa-store', route: '/store', hasChildren: true }
       ]
     },
     {

@@ -1,0 +1,62 @@
+<div class="store-page-container">
+  <app-page-header
+    title="Find All Stores"
+    description="Browse registered stores, profile references, managers and operational statuses."
+  ></app-page-header>
+
+  <div class="card p-3 mb-4">
+    <app-search-box
+      placeholder="Search stores by code, name, city or region..."
+      (search)="onSearch($event)"
+    ></app-search-box>
+  </div>
+
+  @if (loading) {
+    <app-loader text="Loading store registry..."></app-loader>
+  }
+
+  @if (!loading) {
+    <div class="card">
+      @if (filteredStores.length > 0) {
+        <div class="table-responsive" style="border: none; margin: 0;">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Store Id</th>
+                <th>Store Code</th>
+                <th>Store Name</th>
+                <th>Manager</th>
+                <th>City</th>
+                <th>Region</th>
+                <th>Updated</th>
+                <th class="text-center">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (store of filteredStores; track store.Store_Id_PK) {
+                <tr>
+                  <td class="text-bold">{{ store.Store_Id_PK }}</td>
+                  <td class="text-bold text-muted">{{ store.Store_Code }}</td>
+                  <td class="text-bold text-primary">{{ store.Store_Name }}</td>
+                  <td>{{ store.managerName }}</td>
+                  <td>{{ store.city }}</td>
+                  <td>{{ store.region }}</td>
+                  <td>{{ store.Updated_DateTime }}</td>
+                  <td class="text-center">
+                    <app-status-badge [status]="store.status"></app-status-badge>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      } @else {
+        <app-empty-state
+          icon="fa-store"
+          title="No Stores Found"
+          description="No store profiles matched your search criteria."
+        ></app-empty-state>
+      }
+    </div>
+  }
+</div>
