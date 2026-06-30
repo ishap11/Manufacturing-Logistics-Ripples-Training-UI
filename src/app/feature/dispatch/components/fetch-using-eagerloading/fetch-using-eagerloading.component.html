@@ -1,0 +1,45 @@
+<div class="card">
+
+    <h3>Dispatch Records (Eager Loading)</h3>
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>Dispatch ID</th>
+                <th>DC ID</th>
+                <th>Store ID</th>
+                <th>Dispatch Date</th>
+                <th>Status</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            @for(dispatch of dispatches; track dispatch.dispatchId){
+
+            <tr>
+
+                <td>{{dispatch.dispatchId}}</td>
+
+                <td>{{dispatch.dcId}}</td>
+
+                <td>{{dispatch.storeId}}</td>
+
+                <td>{{dispatch.dispatchDate}}</td>
+
+                <td>{{dispatch.statusName}}</td>
+
+            </tr>
+
+            }
+
+        </tbody>
+
+    </table>
+
+</div>
