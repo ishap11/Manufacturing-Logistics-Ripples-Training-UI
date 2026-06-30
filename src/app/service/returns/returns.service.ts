@@ -2,17 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 
-export interface StoreReturn {
-  id: number;
-  returnNumber: string;
-  storeName: string;
-  sku: string;
-  productName: string;
-  quantityReturned: number;
-  reason: string;
-  refundStatus: 'Pending' | 'Approved' | 'Rejected';
-  date: string;
-}
+import { StoreReturn } from '../../model/returns.model';
+export type { StoreReturn };
 
 @Injectable({
   providedIn: 'root'

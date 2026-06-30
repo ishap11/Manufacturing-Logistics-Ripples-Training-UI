@@ -2,23 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 
-export interface SystemUser {
-  id: number;
-  username: string;
-  name: string;
-  role: string;
-  status: 'Active' | 'Inactive';
-  lastLogin: string;
-}
-
-export interface SecurityLog {
-  id: number;
-  timestamp: string;
-  user: string;
-  ipAddress: string;
-  action: string;
-  severity: 'Info' | 'Warning' | 'Critical';
-}
+import { SystemUser, SecurityLog } from '../../model/administration.model';
+export type { SystemUser, SecurityLog };
 
 @Injectable({
   providedIn: 'root'

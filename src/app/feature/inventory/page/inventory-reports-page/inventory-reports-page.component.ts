@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PageHeaderComponent } from '../../../common/component/page-header/page-header.component';
+import { PageHeaderComponent } from '../../../../common/component/page-header/page-header.component';
 
 @Component({
   selector: 'app-inventory-reports-page',

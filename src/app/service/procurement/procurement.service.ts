@@ -2,16 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 
-export interface PurchaseOrder {
-  id: number;
-  poNumber: string;
-  supplierName: string;
-  orderDate: string;
-  deliveryDate?: string;
-  totalAmount: number;
-  itemsCount?: number;
-  status: string; // expanded to string for flex mock inputs
-}
+import { PurchaseOrder } from '../../model/procurement.model';
+export type { PurchaseOrder };
 
 @Injectable({
   providedIn: 'root'

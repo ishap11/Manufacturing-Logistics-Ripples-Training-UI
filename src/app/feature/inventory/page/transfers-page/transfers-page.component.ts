@@ -1,10 +1,10 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { InventoryService, StockTransfer } from '../../../service/inventory/inventory.service';
-import { PageHeaderComponent } from '../../../common/component/page-header/page-header.component';
-import { StatusBadgeComponent } from '../../../common/component/status-badge/status-badge.component';
-import { LoaderComponent } from '../../../common/component/loader/loader.component';
-import { EmptyStateComponent } from '../../../common/component/empty-state/empty-state.component';
+import { InventoryService, StockTransfer } from '../../../../service/inventory/inventory.service';
+import { PageHeaderComponent } from '../../../../common/component/page-header/page-header.component';
+import { StatusBadgeComponent } from '../../../../common/component/status-badge/status-badge.component';
+import { LoaderComponent } from '../../../../common/component/loader/loader.component';
+import { EmptyStateComponent } from '../../../../common/component/empty-state/empty-state.component';
 
 @Component({
   selector: 'app-transfers-page',

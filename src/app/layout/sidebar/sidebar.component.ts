@@ -2,18 +2,7 @@ import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 
-export interface SidebarItem {
-  id: string;
-  label: string;
-  icon: string;
-  route: string;
-  hasChildren?: boolean;
-}
-
-export interface SidebarGroup {
-  name: string;
-  items: SidebarItem[];
-}
+import { SidebarItem, SidebarGroup } from '../../model/layout.model';
 
 @Component({
   selector: 'app-sidebar',

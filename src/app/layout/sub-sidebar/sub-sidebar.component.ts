@@ -2,11 +2,7 @@ import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-export interface SubSidebarLink {
-  label: string;
-  route: string;
-  icon: string;
-}
+import { SubSidebarLink } from '../../model/layout.model';
 
 @Component({
   selector: 'app-sub-sidebar',
