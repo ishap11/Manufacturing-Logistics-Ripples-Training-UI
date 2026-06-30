@@ -13,7 +13,7 @@ import { SidebarItem, SidebarGroup } from '../../model/layout.model';
 })
 export class SidebarComponent {
   @Input() collapsed: boolean = false;
-  
+
   @Output() toggleCollapse = new EventEmitter<void>();
   @Output() moduleSelect = new EventEmitter<string>();
 
@@ -42,12 +42,12 @@ export class SidebarComponent {
         { id: 'dc-receiving', label: 'Receiving & QC', icon: 'fa-clipboard-check', route: '/dc-receiving' }
       ]
     },
-    {
-      name: 'Warehouse',
-      items: [
-        { id: 'inventory', label: 'DC Inventory', icon: 'fa-warehouse', route: '/inventory', hasChildren: true }
-      ]
-    },
+    // {
+    //   name: 'Warehouse',
+    //   items: [
+    //     { id: 'inventory', label: 'DC Inventory', icon: 'fa-warehouse', route: '/inventory', hasChildren: true }
+    //   ]
+    // },
     {
       name: 'Outbound',
       items: [
@@ -71,7 +71,7 @@ export class SidebarComponent {
 
   onItemClick(item: SidebarItem, event: Event): void {
     this.moduleSelect.emit(item.id);
-    
+
     if (item.hasChildren) {
       this.moduleSelect.emit(item.id);
     }

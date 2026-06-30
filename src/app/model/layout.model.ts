@@ -8,7 +8,7 @@ export interface SidebarItem {
 
 export interface SidebarGroup {
   name: string;
-  items: SidebarItem[];
+  items?: SidebarItem[];
 }
 
 export interface SubSidebarLink {
