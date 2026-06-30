@@ -1,1 +1,54 @@
-/* simplified */
+.procurement-container {
+  padding: 24px;
+}
+
+.procurement-container h2 {
+  margin-bottom: 8px;
+}
+
+.procurement-container p {
+  color: #666;
+  margin-bottom: 25px;
+}
+
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 25px;
+}
+
+.tab {
+  padding: 12px 0;
+  cursor: pointer;
+  color: #666;
+  font-weight: 500;
+  position: relative;
+  transition: 0.25s;
+  user-select: none;
+}
+
+.tab:hover {
+  color: #2563eb;
+}
+
+.tab.active {
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.tab.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 3px;
+  background: #2563eb;
+  border-radius: 2px;
+}
+
+.content {
+  margin-top: 25px;
+}

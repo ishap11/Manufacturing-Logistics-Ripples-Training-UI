@@ -1,0 +1,95 @@
+<div class="card">
+
+    <h2>Find Purchase Order By ID</h2>
+
+    <form
+        #poForm="ngForm"
+        (ngSubmit)="searchPurchaseOrder(poForm)">
+
+        <div class="form-group">
+
+            <label>Purchase Order ID </label>
+
+            <input
+                type="number"
+                name="purchaseOrderId"
+                [(ngModel)]="purchaseOrderId"
+                #purchaseOrderIdCtrl="ngModel"
+                required
+                min="1">
+
+            <small
+    class="error"
+    *ngIf="purchaseOrderIdCtrl.errors?.['required'] &&
+           (purchaseOrderIdCtrl.touched || poForm.submitted)">
+
+    Purchase Order ID is required
+
+</small>
+
+<small
+    class="error"
+    *ngIf="purchaseOrderIdCtrl.errors?.['min'] &&
+           (purchaseOrderIdCtrl.touched || poForm.submitted)">
+
+    Purchase Order ID must be greater than 0
+
+</small>
+        </div>
+
+        <div class="button-container">
+
+            <button
+                type="button"
+                (click)="resetForm(poForm)">
+
+                Reset
+
+            </button>
+
+            <button
+                type="submit">
+
+                Search
+
+            </button>
+
+        </div>
+
+    </form>
+
+    <div *ngIf="searched">
+
+        <h3>Products</h3>
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>S.No</th>
+
+                    <th>Product Name</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr *ngFor="let product of productNames; let i = index">
+
+                    <td>{{i + 1}}</td>
+
+                    <td>{{product}}</td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
