@@ -1,55 +1,317 @@
 <div class="dc-receiving-container">
   <app-page-header 
-    title="Gate Receiving &amp; Quality Control" 
+    title="Receiving &amp; Quality Control" 
     description="Physical truck intake logging, quality assurance parameter verification, and warehouse shelf storage allocation."
   >
   </app-page-header>
   
-  @if (loading) {
-    <app-loader text="Loading receiving logs..."></app-loader>
-  }
-  
-  @if (!loading) {
-    <div class="row g-4">
-      <!-- Active Gates Grid -->
-      @for (gate of gates; track gate.id) {
-        <div class="col-12 col-md-4">
-          <div class="card h-100">
-            <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
-              <h3 class="m-0 text-bold" style="font-size: 1rem; color: var(--color-primary);">{{ gate.gateName }}</h3>
-              <app-status-badge [status]="gate.status"></app-status-badge>
+  <!-- Reusable Industrial Data Table Component -->
+  <app-data-table
+    [config]="tableConfig"
+    [data]="filteredReceivings"
+    [loading]="loading"
+    (search)="onSearch($event)"
+    (filter)="onFilterChange($event)"
+    (add)="openAddModal()"
+    (view)="openViewModal($event)"
+    (edit)="openEditModal($event)"
+    (delete)="confirmDelete($event)"
+  >
+    <!-- Custom Cell Templates -->
+    <ng-template tableCell="receivingId" let-r>
+      <span class="text-bold text-muted">{{ r.receivingId }}</span>
+    </ng-template>
+
+    <ng-template tableCell="shipment" let-r>
+      <span class="text-bold text-primary">{{ r.shipment }}</span>
+    </ng-template>
+
+    <ng-template tableCell="warehouse" let-r>
+      <span class="text-bold">{{ r.warehouse }}</span>
+    </ng-template>
+
+    <ng-template tableCell="totalProducts" let-r>
+      <span>{{ r.totalProducts }} items</span>
+    </ng-template>
+
+    <ng-template tableCell="totalQuantity" let-r>
+      <span class="text-bold">{{ r.totalQuantity }} units</span>
+    </ng-template>
+
+    <ng-template tableCell="status" let-r>
+      <app-status-badge [status]="r.status"></app-status-badge>
+    </ng-template>
+  </app-data-table>
+</div>
+
+<!-- Add / Edit / View Modal -->
+@if (isModalOpen) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal-card animate-slide" [class.modal-large]="modalStep === 2" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="modal-title">
+          @if (modalMode === 'add') {
+            {{ modalStep === 1 ? 'Receive Delivered Shipment' : 'Enter Shipment Quantities & QC Details' }}
+          } @else if (modalMode === 'edit') {
+            Edit Receiving Log - {{ selectedReceiving?.receivingId }}
+          } @else {
+            View Receiving Log - {{ selectedReceiving?.receivingId }}
+          }
+        </h3>
+        <button type="button" class="close-btn" (click)="closeModal()" aria-label="Close">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <form [formGroup]="receivingForm" (ngSubmit)="onSubmit()">
+        <div class="modal-body">
+          
+          <!-- STEP 1: Shipment Dropdown Selection -->
+          @if (modalMode === 'add' && modalStep === 1) {
+            <div class="form-group mb-4">
+              <label for="shipmentSelect">Shipment ID <span class="text-danger">*</span></label>
+              <select 
+                id="shipmentSelect" 
+                formControlName="shipment" 
+                class="form-control"
+                [class.is-invalid]="submitted && receivingForm.get('shipment')?.invalid"
+                (change)="onShipmentSelected($any($event.target).value)"
+              >
+                <option value="" disabled selected>Select Shipment...</option>
+                @for (shp of shipments; track trackByShipmentId($index, shp)) {
+                  <option [value]="shp.shipmentId">{{ shp.shipmentId }}</option>
+                }
+              </select>
+              @if (submitted && receivingForm.get('shipment')?.invalid) {
+                <div class="invalid-feedback">
+                  Please select a shipment to start receiving.
+                </div>
+              }
             </div>
             
-            @if (gate.activeShipment) {
-              <div class="gate-details">
-                <div class="mb-2">
-                  <span class="text-muted text-uppercase" style="font-size: 0.72rem; display: block;">Carrier Partner</span>
-                  <strong style="font-size: 0.92rem;">{{ gate.activeShipment.carrier }}</strong>
+            <div class="text-end mt-4">
+              <button 
+                type="button" 
+                class="btn btn-primary"
+                [disabled]="!receivingForm.get('shipment')?.value" 
+                (click)="startReceiving()"
+              >
+                Start Receiving <i class="fas fa-arrow-right ml-1"></i>
+              </button>
+            </div>
+          }
+
+          <!-- STEP 2 & 3: Quantity log, warehouse select, and product tables -->
+          @if (modalStep === 2) {
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Shipment ID</label>
+                  <input 
+                    type="text" 
+                    [value]="receivingForm.get('shipment')?.value" 
+                    class="form-control" 
+                    disabled 
+                  />
                 </div>
-                <div class="mb-2">
-                  <span class="text-muted text-uppercase" style="font-size: 0.72rem; display: block;">PO Ref</span>
-                  <strong>{{ gate.activeShipment.poRef }}</strong>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="warehouseSelect">Store In Warehouse <span class="text-danger">*</span></label>
+                  <select 
+                    id="warehouseSelect" 
+                    formControlName="warehouse" 
+                    class="form-control"
+                    [class.is-invalid]="(receivingForm.get('warehouse')?.touched || submitted) && receivingForm.get('warehouse')?.invalid"
+                  >
+                    <option value="" disabled selected>Select Warehouse...</option>
+                    @for (wh of warehouses; track trackByWarehouseId($index, wh)) {
+                      <option [value]="wh.code">{{ wh.code }} - {{ wh.name }}</option>
+                    }
+                  </select>
+                  @if ((receivingForm.get('warehouse')?.touched || submitted) && receivingForm.get('warehouse')?.invalid) {
+                    <div class="invalid-feedback">
+                      Warehouse storage location is mandatory.
+                    </div>
+                  }
                 </div>
-                <div class="mb-3">
-                  <span class="text-muted text-uppercase" style="font-size: 0.72rem; display: block;">QC Verification</span>
-                  <strong [ngClass]="gate.activeShipment.qcCheck === 'Passed' ? 'text-success' : 'text-warning'">
-                    {{ gate.activeShipment.qcCheck }}
-                  </strong>
+              </div>
+            </div>
+
+            <!-- Dynamic Product Table -->
+            <div class="mb-4">
+              <h4 class="mb-3 text-semibold" style="font-size: 0.95rem; color: var(--color-primary);">
+                Received Products Registry
+              </h4>
+              
+              <div class="product-table-wrapper">
+                <table class="table table-bordered align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th style="min-width: 220px;">Product Name <span class="text-danger">*</span></th>
+                      <th class="text-center" style="width: 100px;">Ordered Qty</th>
+                      <th class="text-center" style="width: 120px;">Received Qty <span class="text-danger">*</span></th>
+                      <th class="text-center" style="width: 120px;">Damaged Qty <span class="text-danger">*</span></th>
+                      <th class="text-center" style="width: 140px;">QC Status <span class="text-danger">*</span></th>
+                      @if (modalMode !== 'view') {
+                        <th class="text-center" style="width: 60px;">Remove</th>
+                      }
+                    </tr>
+                  </thead>
+                  <tbody formArrayName="items">
+                    @for (row of itemsFormArray.controls; track trackByRowIndex($index); let idx = $index) {
+                      <tr [formGroupName]="idx">
+                        <!-- Product Name Dropdown -->
+                        <td>
+                          <select 
+                            formControlName="productName" 
+                            class="form-control"
+                            [class.is-invalid]="(row.get('productName')?.touched || submitted) && row.get('productName')?.invalid"
+                          >
+                            <option value="" disabled selected>Select Product...</option>
+                            @for (pName of availableProductNames; track pName) {
+                              <option [value]="pName">{{ pName }}</option>
+                            }
+                          </select>
+                          @if ((row.get('productName')?.touched || submitted) && row.get('productName')?.invalid) {
+                            <div class="invalid-feedback">Required</div>
+                          }
+                        </td>
+
+                        <!-- Ordered Qty (Read Only) -->
+                        <td class="text-center text-bold text-muted bg-light">
+                          {{ row.get('orderedQty')?.value }}
+                        </td>
+
+                        <!-- Received Qty (Numeric Input) -->
+                        <td>
+                          <input 
+                            type="number" 
+                            formControlName="receivedQty" 
+                            class="form-control text-center"
+                            [class.is-invalid]="(row.get('receivedQty')?.touched || submitted) && (row.get('receivedQty')?.invalid || row.errors?.['receivedExceedsOrdered'])"
+                          />
+                          @if ((row.get('receivedQty')?.touched || submitted)) {
+                            @if (row.get('receivedQty')?.hasError('required')) {
+                              <div class="invalid-feedback d-block">Required</div>
+                            } @else if (row.get('receivedQty')?.hasError('min')) {
+                              <div class="invalid-feedback d-block">Min 0</div>
+                            } @else if (row.errors?.['receivedExceedsOrdered']) {
+                              <div class="invalid-feedback d-block">Cannot exceed Ordered Qty ({{ row.get('orderedQty')?.value }})</div>
+                            }
+                          }
+                        </td>
+
+                        <!-- Damaged Qty (Numeric Input) -->
+                        <td>
+                          <input 
+                            type="number" 
+                            formControlName="damagedQty" 
+                            class="form-control text-center"
+                            [class.is-invalid]="(row.get('damagedQty')?.touched || submitted) && (row.get('damagedQty')?.invalid || row.errors?.['damagedExceedsReceived'])"
+                          />
+                          @if ((row.get('damagedQty')?.touched || submitted)) {
+                            @if (row.get('damagedQty')?.hasError('required')) {
+                              <div class="invalid-feedback d-block">Required</div>
+                            } @else if (row.get('damagedQty')?.hasError('min')) {
+                              <div class="invalid-feedback d-block">Min 0</div>
+                            } @else if (row.errors?.['damagedExceedsReceived']) {
+                              <div class="invalid-feedback d-block">Cannot exceed Received Qty ({{ row.get('receivedQty')?.value }})</div>
+                            }
+                          }
+                        </td>
+
+                        <!-- QC Status Dropdown -->
+                        <td>
+                          <select 
+                            formControlName="qcStatus" 
+                            class="form-control"
+                            [class.is-invalid]="(row.get('qcStatus')?.touched || submitted) && row.get('qcStatus')?.invalid"
+                          >
+                            @for (qc of qcStatusOptions; track qc) {
+                              <option [value]="qc">{{ qc }}</option>
+                            }
+                          </select>
+                        </td>
+
+                        <!-- Remove Button -->
+                        @if (modalMode !== 'view') {
+                          <td class="text-center">
+                            <button 
+                              type="button" 
+                              class="btn btn-outline btn-icon p-1"
+                              (click)="removeProductRow(idx)"
+                              title="Remove Product"
+                            >
+                              <i class="fas fa-trash-alt text-danger"></i>
+                            </button>
+                          </td>
+                        }
+                      </tr>
+                    }
+                    @if (itemsFormArray.length === 0) {
+                      <tr>
+                        <td [attr.colspan]="modalMode !== 'view' ? 6 : 5" class="text-center py-4 text-muted">
+                          <i class="fas fa-exclamation-circle mb-1" style="font-size: 1.2rem;"></i>
+                          <p class="m-0" style="font-size: 0.85rem;">No products added. Add a product row to receive items.</p>
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Add Product Button -->
+              @if (modalMode !== 'view') {
+                <div class="mt-3">
+                  <button 
+                    type="button" 
+                    class="btn btn-secondary btn-sm"
+                    (click)="addProductRow()"
+                  >
+                    <i class="fas fa-plus"></i> Add Product
+                  </button>
                 </div>
-                
-                <button type="button" class="btn btn-primary w-100 btn-sm" (click)="completeReceiving(gate)">
-                  Complete Intake &amp; Store
+              }
+            </div>
+
+            <!-- Modal Footer Buttons -->
+            <div class="modal-footer px-0 pb-0 pt-3">
+              <button 
+                type="button" 
+                class="btn btn-secondary" 
+                (click)="closeModal()"
+              >
+                Cancel
+              </button>
+              
+              @if (modalMode !== 'view') {
+                <button 
+                  type="submit" 
+                  class="btn btn-primary"
+                  [disabled]="receivingForm.invalid || itemsFormArray.length === 0"
+                >
+                  Complete Receiving
                 </button>
-              </div>
-            } @else {
-              <div class="text-center py-4 text-muted">
-                <i class="fas fa-circle-notch fa-spin mb-2" style="font-size: 1.5rem; opacity: 0.3;"></i>
-                <p class="m-0" style="font-size: 0.82rem;">Awaiting Carrier Truck Arrival</p>
-              </div>
-            }
-          </div>
+              }
+            </div>
+          }
+
         </div>
-      }
+      </form>
     </div>
-  }
-</div>
+  </div>
+}
+
+<!-- Delete Confirmation Modal -->
+<app-confirmation-modal
+  [isOpen]="isDeleteModalOpen"
+  title="Delete Receiving?"
+  message="This action cannot be undone."
+  confirmLabel="Delete"
+  cancelLabel="Cancel"
+  confirmClass="btn-danger"
+  (confirm)="onDeleteConfirmed()"
+  (cancel)="onDeleteCancelled()"
+></app-confirmation-modal>

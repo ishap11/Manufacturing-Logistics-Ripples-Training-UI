@@ -1,0 +1,110 @@
+<div class="card">
+
+    <h3>Filter Dispatch by Distribution Center</h3>
+
+    <form [formGroup]="filterForm">
+
+        <div class="form-group">
+
+            <label>
+                Distribution Center <span>*</span>
+            </label>
+
+            <select formControlName="dcId">
+
+                <option value="">Select Distribution Center</option>
+
+                <option value="1">DC 1</option>
+
+                <option value="2">DC 2</option>
+
+                <option value="3">DC 3</option>
+
+            </select>
+
+            @if(filterForm.get('dcId')?.touched &&
+                filterForm.get('dcId')?.hasError('required')){
+
+                <small class="error">
+                    Distribution Center is required.
+                </small>
+
+            }
+
+        </div>
+
+        <div class="button-group">
+
+            <button
+                type="button"
+                class="search-btn"
+                (click)="search()">
+
+                Search
+
+            </button>
+
+            <button
+                type="button"
+                class="reset-btn"
+                (click)="reset()">
+
+                Reset
+
+            </button>
+
+        </div>
+
+    </form>
+
+    @if(noRecords){
+
+        <div class="no-records">
+
+            No dispatch records found.
+
+        </div>
+
+    }
+
+    @if(filteredDispatches.length > 0){
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>Dispatch ID</th>
+                <th>DC ID</th>
+                <th>Store ID</th>
+                <th>Dispatch Date</th>
+                <th>Status ID</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            @for(dispatch of filteredDispatches; track dispatch.dispatchId){
+
+            <tr>
+
+                <td>{{dispatch.dispatchId}}</td>
+                <td>{{dispatch.dcId}}</td>
+                <td>{{dispatch.storeId}}</td>
+                <td>{{dispatch.dispatchDate}}</td>
+                <td>{{dispatch.statusId}}</td>
+
+            </tr>
+
+            }
+
+        </tbody>
+
+    </table>
+
+    }
+
+</div>
