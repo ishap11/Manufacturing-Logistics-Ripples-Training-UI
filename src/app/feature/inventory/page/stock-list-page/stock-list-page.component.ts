@@ -1,11 +1,11 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { InventoryService, StockLevel } from '../../../service/inventory/inventory.service';
-import { PageHeaderComponent } from '../../../common/component/page-header/page-header.component';
-import { SearchBoxComponent } from '../../../common/component/search-box/search-box.component';
-import { StatusBadgeComponent } from '../../../common/component/status-badge/status-badge.component';
-import { LoaderComponent } from '../../../common/component/loader/loader.component';
-import { EmptyStateComponent } from '../../../common/component/empty-state/empty-state.component';
+import { InventoryService, StockLevel } from '../../../../service/inventory/inventory.service';
+import { PageHeaderComponent } from '../../../../common/component/page-header/page-header.component';
+import { SearchBoxComponent } from '../../../../common/component/search-box/search-box.component';
+import { StatusBadgeComponent } from '../../../../common/component/status-badge/status-badge.component';
+import { LoaderComponent } from '../../../../common/component/loader/loader.component';
+import { EmptyStateComponent } from '../../../../common/component/empty-state/empty-state.component';
 
 @Component({
   selector: 'app-stock-list-page',

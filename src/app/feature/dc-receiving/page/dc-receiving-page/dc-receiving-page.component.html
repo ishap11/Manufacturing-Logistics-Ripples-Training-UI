@@ -1,0 +1,55 @@
+<div class="dc-receiving-container">
+  <app-page-header 
+    title="Gate Receiving &amp; Quality Control" 
+    description="Physical truck intake logging, quality assurance parameter verification, and warehouse shelf storage allocation."
+  >
+  </app-page-header>
+  
+  @if (loading) {
+    <app-loader text="Loading receiving logs..."></app-loader>
+  }
+  
+  @if (!loading) {
+    <div class="row g-4">
+      <!-- Active Gates Grid -->
+      @for (gate of gates; track gate.id) {
+        <div class="col-12 col-md-4">
+          <div class="card h-100">
+            <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+              <h3 class="m-0 text-bold" style="font-size: 1rem; color: var(--color-primary);">{{ gate.gateName }}</h3>
+              <app-status-badge [status]="gate.status"></app-status-badge>
+            </div>
+            
+            @if (gate.activeShipment) {
+              <div class="gate-details">
+                <div class="mb-2">
+                  <span class="text-muted text-uppercase" style="font-size: 0.72rem; display: block;">Carrier Partner</span>
+                  <strong style="font-size: 0.92rem;">{{ gate.activeShipment.carrier }}</strong>
+                </div>
+                <div class="mb-2">
+                  <span class="text-muted text-uppercase" style="font-size: 0.72rem; display: block;">PO Ref</span>
+                  <strong>{{ gate.activeShipment.poRef }}</strong>
+                </div>
+                <div class="mb-3">
+                  <span class="text-muted text-uppercase" style="font-size: 0.72rem; display: block;">QC Verification</span>
+                  <strong [ngClass]="gate.activeShipment.qcCheck === 'Passed' ? 'text-success' : 'text-warning'">
+                    {{ gate.activeShipment.qcCheck }}
+                  </strong>
+                </div>
+                
+                <button type="button" class="btn btn-primary w-100 btn-sm" (click)="completeReceiving(gate)">
+                  Complete Intake &amp; Store
+                </button>
+              </div>
+            } @else {
+              <div class="text-center py-4 text-muted">
+                <i class="fas fa-circle-notch fa-spin mb-2" style="font-size: 1.5rem; opacity: 0.3;"></i>
+                <p class="m-0" style="font-size: 0.82rem;">Awaiting Carrier Truck Arrival</p>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

@@ -4,7 +4,7 @@ import { authGuard } from './common/guards/auth.guard';
 export const routes: Routes = [
   {
     path: 'login',
-    loadComponent: () => import('./feature/login/login.component').then(m => m.LoginComponent)
+    loadComponent: () => import('./feature/login/login/login.component').then(m => m.LoginComponent)
   },
   {
     path: '',
@@ -18,7 +18,7 @@ export const routes: Routes = [
       },
       {
         path: 'dashboard',
-        loadComponent: () => import('./feature/dashboard/page/dashboard-page.component').then(m => m.DashboardPageComponent)
+        loadComponent: () => import('./feature/dashboard/page/dashboard-page/dashboard-page.component').then(m => m.DashboardPageComponent)
       },
       {
         path: 'supplier',
@@ -30,31 +30,31 @@ export const routes: Routes = [
           },
           {
             path: 'dashboard',
-            loadComponent: () => import('./feature/supplier/page/supplier-dashboard-page.component').then(m => m.SupplierDashboardPageComponent)
+            loadComponent: () => import('./feature/supplier/page/supplier-dashboard-page/supplier-dashboard-page.component').then(m => m.SupplierDashboardPageComponent)
           },
           {
             path: 'list',
-            loadComponent: () => import('./feature/supplier/page/supplier-list-page.component').then(m => m.SupplierListPageComponent)
+            loadComponent: () => import('./feature/supplier/page/supplier-list-page/supplier-list-page.component').then(m => m.SupplierListPageComponent)
           },
           {
             path: 'add',
-            loadComponent: () => import('./feature/supplier/page/supplier-form-page.component').then(m => m.SupplierFormPageComponent)
+            loadComponent: () => import('./feature/supplier/page/supplier-form-page/supplier-form-page.component').then(m => m.SupplierFormPageComponent)
           },
           {
             path: 'edit/:id',
-            loadComponent: () => import('./feature/supplier/page/supplier-form-page.component').then(m => m.SupplierFormPageComponent)
+            loadComponent: () => import('./feature/supplier/page/supplier-form-page/supplier-form-page.component').then(m => m.SupplierFormPageComponent)
           },
           {
             path: 'categories',
-            loadComponent: () => import('./feature/supplier/page/supplier-categories-page.component').then(m => m.SupplierCategoriesPageComponent)
+            loadComponent: () => import('./feature/supplier/page/supplier-categories-page/supplier-categories-page.component').then(m => m.SupplierCategoriesPageComponent)
           },
           {
             path: 'countries',
-            loadComponent: () => import('./feature/supplier/page/supplier-countries-page.component').then(m => m.SupplierCountriesPageComponent)
+            loadComponent: () => import('./feature/supplier/page/supplier-countries-page/supplier-countries-page.component').then(m => m.SupplierCountriesPageComponent)
           },
           {
             path: 'rate-cards',
-            loadComponent: () => import('./feature/supplier/page/supplier-rate-cards-page.component').then(m => m.SupplierRateCardsPageComponent)
+            loadComponent: () => import('./feature/supplier/page/supplier-rate-cards-page/supplier-rate-cards-page.component').then(m => m.SupplierRateCardsPageComponent)
           }
         ]
       },
@@ -72,7 +72,7 @@ export const routes: Routes = [
       },
       {
         path: 'dc-receiving',
-        loadComponent: () => import('./feature/dc-receiving/page/dc-receiving-page.component').then(m => m.DcReceivingPageComponent)
+        loadComponent: () => import('./feature/dc-receiving/page/dc-receiving-page/dc-receiving-page.component').then(m => m.DcReceivingPageComponent)
       },
       {
         path: 'inventory',
@@ -84,27 +84,27 @@ export const routes: Routes = [
           },
           {
             path: 'dashboard',
-            loadComponent: () => import('./feature/inventory/page/inventory-dashboard-page.component').then(m => m.InventoryDashboardPageComponent)
+            loadComponent: () => import('./feature/inventory/page/inventory-dashboard-page/inventory-dashboard-page.component').then(m => m.InventoryDashboardPageComponent)
           },
           {
             path: 'stock',
-            loadComponent: () => import('./feature/inventory/page/stock-list-page.component').then(m => m.StockListPageComponent)
+            loadComponent: () => import('./feature/inventory/page/stock-list-page/stock-list-page.component').then(m => m.StockListPageComponent)
           },
           {
             path: 'transfers',
-            loadComponent: () => import('./feature/inventory/page/transfers-page.component').then(m => m.TransfersPageComponent)
+            loadComponent: () => import('./feature/inventory/page/transfers-page/transfers-page.component').then(m => m.TransfersPageComponent)
           },
           {
             path: 'adjustments',
-            loadComponent: () => import('./feature/inventory/page/adjustments-page.component').then(m => m.AdjustmentsPageComponent)
+            loadComponent: () => import('./feature/inventory/page/adjustments-page/adjustments-page.component').then(m => m.AdjustmentsPageComponent)
           },
           {
             path: 'cycle-count',
-            loadComponent: () => import('./feature/inventory/page/cycle-count-page.component').then(m => m.CycleCountPageComponent)
+            loadComponent: () => import('./feature/inventory/page/cycle-count-page/cycle-count-page.component').then(m => m.CycleCountPageComponent)
           },
           {
             path: 'reports',
-            loadComponent: () => import('./feature/inventory/page/inventory-reports-page.component').then(m => m.InventoryReportsPageComponent)
+            loadComponent: () => import('./feature/inventory/page/inventory-reports-page/inventory-reports-page.component').then(m => m.InventoryReportsPageComponent)
           }
         ]
       },

@@ -2,16 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 
-export interface DispatchTracking {
-  id: number;
-  dispatchNumber: string;
-  destination: string;
-  carrier: string;
-  method: 'Air' | 'Sea' | 'Road';
-  shipmentWeightKg: number;
-  status: string; // expanded to string for flex mock inputs
-  estimatedDelivery: string;
-}
+import { DispatchTracking } from '../../model/dispatch.model';
+export type { DispatchTracking };
 
 @Injectable({
   providedIn: 'root'

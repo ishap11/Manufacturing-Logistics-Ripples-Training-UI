@@ -3,11 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
-export interface BreadcrumbItem {
-  label: string;
-  url: string;
-  active?: boolean;
-}
+import { BreadcrumbItem } from '../../../model/breadcrumb.model';
+export type { BreadcrumbItem };
 
 @Component({
   selector: 'app-breadcrumb',

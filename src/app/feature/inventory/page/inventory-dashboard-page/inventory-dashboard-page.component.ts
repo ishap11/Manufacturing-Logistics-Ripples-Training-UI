@@ -1,8 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { InventoryService, StockLevel } from '../../../service/inventory/inventory.service';
-import { PageHeaderComponent } from '../../../common/component/page-header/page-header.component';
-import { LoaderComponent } from '../../../common/component/loader/loader.component';
+import { InventoryService, StockLevel } from '../../../../service/inventory/inventory.service';
+import { PageHeaderComponent } from '../../../../common/component/page-header/page-header.component';
+import { LoaderComponent } from '../../../../common/component/loader/loader.component';
 
 @Component({
   selector: 'app-inventory-dashboard-page',

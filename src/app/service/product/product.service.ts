@@ -2,23 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 
-export interface Product {
-  id: number;
-  sku: string;
-  name: string;
-  category: string;
-  barcode: string;
-  unitOfMeasure: string;
-  costPrice: number;
-  retailPrice: number;
-  minStockLevel: number;
-  maxStockLevel: number;
-  dimensions: string; // e.g. 10x15x5 cm
-  weightKg: number;
-  status: 'Active' | 'Inactive';
-  unitPrice?: number; // optional backward compatibility helper
-  qcStatus?: string; // optional backward compatibility helper
-}
+import { Product } from '../../model/product.model';
+export type { Product };
 
 @Injectable({
   providedIn: 'root'
