@@ -110,7 +110,33 @@ export const routes: Routes = [
       },
       {
         path: 'store',
-        loadComponent: () => import('./feature/store/page/store-page.component').then(m => m.StorePageComponent)
+        children: [
+          {
+            path: '',
+            redirectTo: 'findall',
+            pathMatch: 'full'
+          },
+          {
+            path: 'add',
+            loadComponent: () => import('./feature/store/page/store-add-page/store-add-page.component').then(m => m.StoreAddPageComponent)
+          },
+          {
+            path: 'find',
+            loadComponent: () => import('./feature/store/page/store-find-page/store-find-page.component').then(m => m.StoreFindPageComponent)
+          },
+          {
+            path: 'filter',
+            loadComponent: () => import('./feature/store/page/store-filter-page/store-filter-page.component').then(m => m.StoreFilterPageComponent)
+          },
+          {
+            path: 'update',
+            loadComponent: () => import('./feature/store/page/store-update-page/store-update-page.component').then(m => m.StoreUpdatePageComponent)
+          },
+          {
+            path: 'findall',
+            loadComponent: () => import('./feature/store/page/store-findall-page/store-findall-page.component').then(m => m.StoreFindallPageComponent)
+          }
+        ]
       },
       {
         path: 'replenishment',

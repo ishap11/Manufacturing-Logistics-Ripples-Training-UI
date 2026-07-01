@@ -77,7 +77,7 @@ export class MainLayoutComponent implements OnInit, OnDestroy {
   }
 
   private checkSubSidebarState(): void {
-    const subSidebarModules = ['supplier', 'inventory'];
+    const subSidebarModules = ['supplier', 'inventory', 'store'];
     this.hasSubSidebar = subSidebarModules.includes(this.activeModule.toLowerCase());
   }
 }
