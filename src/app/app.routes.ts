@@ -28,34 +28,27 @@ export const routes: Routes = [
             redirectTo: 'list',
             pathMatch: 'full'
           },
-          {
-            path: 'dashboard',
-            loadComponent: () => import('./feature/supplier/page/supplier-dashboard-page/supplier-dashboard-page.component').then(m => m.SupplierDashboardPageComponent)
-          },
+         
           {
             path: 'list',
-            loadComponent: () => import('./feature/supplier/page/supplier-list-page/supplier-list-page.component').then(m => m.SupplierListPageComponent)
+            loadComponent: () => import('./feature/supplier/page/find-allsupplier/find-allsupplier').then(m => m.FindAllsupplier)
           },
           {
             path: 'add',
-            loadComponent: () => import('./feature/supplier/page/supplier-form-page/supplier-form-page.component').then(m => m.SupplierFormPageComponent)
+            loadComponent: () => import('./feature/supplier/page/add-supplier/add-supplier').then(m => m.AddSupplier)
           },
           {
-            path: 'edit/:id',
-            loadComponent: () => import('./feature/supplier/page/supplier-form-page/supplier-form-page.component').then(m => m.SupplierFormPageComponent)
+            path: 'update',
+            loadComponent: () => import('./feature/supplier/page/update-supplier/update-supplier.component').then(m => m.UpdateSupplierComponent)
           },
           {
-            path: 'categories',
-            loadComponent: () => import('./feature/supplier/page/supplier-categories-page/supplier-categories-page.component').then(m => m.SupplierCategoriesPageComponent)
+            path: 'find/:id',
+            loadComponent: () => import('./feature/supplier/page/find-supplier-withid/find-supplier-withid').then(m => m.FindSupplierWithid)
           },
           {
-            path: 'countries',
-            loadComponent: () => import('./feature/supplier/page/supplier-countries-page/supplier-countries-page.component').then(m => m.SupplierCountriesPageComponent)
+            path: 'filter-by-city',
+            loadComponent: () => import('./feature/supplier/page/filter-supplier-with-cityname/filter-supplier-with-cityname').then(m => m.FilterSupplierWithCityname)
           },
-          {
-            path: 'rate-cards',
-            loadComponent: () => import('./feature/supplier/page/supplier-rate-cards-page/supplier-rate-cards-page.component').then(m => m.SupplierRateCardsPageComponent)
-          }
         ]
       },
       {

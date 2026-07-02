@@ -1,0 +1,50 @@
+<section class="supplier-page">
+  <div class="page-heading">
+    <h1>Find Supplier by ID</h1>
+    <p>Search locally stored supplier details by supplier ID.</p>
+  </div>
+
+  <form class="search-form" (ngSubmit)="fetchSupplier()">
+    <label>
+      Supplier ID
+      <input type="number" name="supplierId" [(ngModel)]="supplierId" min="1" placeholder="Enter Supplier ID" required />
+    </label>
+    <button type="submit">Fetch Supplier</button>
+  </form>
+
+  @if (searched && !supplier) {
+    <p class="message">No supplier found for ID {{ supplierId }}.</p>
+  }
+
+  @if (supplier) {
+    <article class="supplier-card">
+      <div class="card-header">
+        <span>Supplier ID:  {{ supplier.id }}</span>
+        <strong>{{ supplier.companyName }}</strong>
+      </div>
+
+      <dl>
+        <div>
+          <dt>Supplier Name</dt>
+          <dd>{{ supplier.supplierName }}</dd>
+        </div>
+        <div>
+          <dt>Age</dt>
+          <dd>{{ supplier.age }}</dd>
+        </div>
+        <div>
+          <dt>Phone</dt>
+          <dd>{{ supplier.phone }}</dd>
+        </div>
+        <div>
+          <dt>City</dt>
+          <dd>{{ supplier.city }}</dd>
+        </div>
+        <div class="full-width">
+          <dt>Address</dt>
+          <dd>{{ supplier.address }}</dd>
+        </div>
+      </dl>
+    </article>
+  }
+</section>

@@ -1,9 +1,12 @@
 export interface Supplier {
   id: number;
+  companyName: string;
   supplierName: string;
+  age: number;
   code: string;
   email: string;
   phone: string;
+  address: string;
   category: string;
   city: string;
   country: string;
