@@ -35,7 +35,7 @@
                 @if (!collapsed) {
                   <span class="nav-label">{{ item.label }}</span>
                 }
-                @if (!collapsed && item.hasChildren) {
+                @if (!collapsed && item.hasChildren && item.id !== 'supplier') {
                   <span class="nav-children-indicator">
                     <i class="fas fa-chevron-right"></i>
                   </span>

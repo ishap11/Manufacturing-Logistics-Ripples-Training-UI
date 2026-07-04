@@ -1,0 +1,39 @@
+<section class="supplier-page">
+  <div class="page-heading">
+    <h1>Supplier List</h1>
+    <p>Showing {{ suppliers.length }} supplier{{ suppliers.length === 1 ? '' : 's' }} details.</p>
+  </div>
+
+  <div class="supplier-grid">
+    @for (supplier of suppliers; track supplier.id) {
+      <article class="supplier-card">
+        <div class="card-header">
+          <span>Supplier ID :  {{ supplier.id }}</span>
+          <strong>{{ supplier.companyName }}</strong>
+        </div>
+        <dl>
+          <div>
+            <dt>Supplier Name</dt>
+            <dd>{{ supplier.supplierName }}</dd>
+          </div>
+          <div>
+            <dt>Age</dt>
+            <dd>{{ supplier.age }}</dd>
+          </div>
+          <div>
+            <dt>Phone</dt>
+            <dd>{{ supplier.phone }}</dd>
+          </div>
+          <div>
+            <dt>City</dt>
+            <dd>{{ supplier.city }}</dd>
+          </div>
+          <div class="full-width">
+            <dt>Address</dt>
+            <dd>{{ supplier.address }}</dd>
+          </div>
+        </dl>
+      </article>
+    }
+  </div>
+</section>
