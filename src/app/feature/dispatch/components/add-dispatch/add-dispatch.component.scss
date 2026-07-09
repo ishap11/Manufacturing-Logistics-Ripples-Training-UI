@@ -101,3 +101,19 @@ select:focus {
     font-weight:500;
 
 }
+
+.success-message {
+  background: #d1fae5;
+  color: #065f46;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+}
+
+.error-message {
+  background: #fee2e2;
+  color: #b91c1c;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+}

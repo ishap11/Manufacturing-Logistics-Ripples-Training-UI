@@ -1,7 +1,7 @@
 <div class="table-card">
 
     <h3>Dispatch Records</h3>
-
+    @if(dispatches.length > 0){
     <table>
 
         <thead>
@@ -20,19 +20,19 @@
 
         <tbody>
 
-            @for(dispatch of dispatches; track dispatch.dispatchId){
+            @for(dispatch of dispatches; track dispatch.dispatchIdPk){
 
                 <tr>
 
-                    <td>{{dispatch.dispatchId}}</td>
+                    <td>{{dispatch.dispatchIdPk}}</td>
 
-                    <td>{{dispatch.dcId}}</td>
+                    <td>{{dispatch.dcIdFk}}</td>
 
-                    <td>{{dispatch.storeId}}</td>
+                    <td>{{dispatch.storeIdFk}}</td>
 
                     <td>{{dispatch.dispatchDate}}</td>
 
-                    <td>{{dispatch.statusId}}</td>
+                    <td>{{dispatch.dispatchStatusIdFk}}</td>
 
                 </tr>
 
@@ -41,5 +41,23 @@
         </tbody>
 
     </table>
+}
+
+ @if(noRecords){
+
+    <div class="warning-message">
+        No dispatch records found.
+    </div>
+
+    }
+
+    @if(errorMessage){
+
+    <div class="error-message">
+        {{ errorMessage }}
+    </div>
+
+    }
+
 
 </div>

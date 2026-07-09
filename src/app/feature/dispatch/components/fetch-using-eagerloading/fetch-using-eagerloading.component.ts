@@ -1,4 +1,44 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { DispatchTracking } from '../../../../model/dispatch.model';
+import { DispatchService } from '../../../../service/dispatch/dispatch.service';
+
+@Component({
+  selector: 'mlp-fetch-using-eagerloading',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './fetch-using-eagerloading.component.html',
+  styleUrl: './fetch-using-eagerloading.component.scss'
+})
+export class FetchUsingEagerloadingComponent implements OnInit {
+
+  dispatches: DispatchTracking[] = [];
+
+  constructor(private dispatchService: DispatchService) { }
+
+  ngOnInit(): void {
+
+    this.dispatchService.getDispatchesUsingEagerLoading().subscribe({
+
+      next: (response) => {
+
+        this.dispatches = response;
+
+      },
+
+      error: (error) => {
+
+        console.error(error);
+
+      }
+
+    });
+
+  }
+
+}
+/*import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
@@ -37,3 +77,4 @@ export class FetchUsingEagerloadingComponent {
 
   ];
 }
+*/

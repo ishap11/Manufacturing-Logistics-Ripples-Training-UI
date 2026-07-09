@@ -87,15 +87,15 @@
 
         <tbody>
 
-            @for(dispatch of filteredDispatches; track dispatch.dispatchId){
+            @for(dispatch of filteredDispatches; track dispatch.dispatchIdPk){
 
             <tr>
 
-                <td>{{dispatch.dispatchId}}</td>
-                <td>{{dispatch.dcId}}</td>
-                <td>{{dispatch.storeId}}</td>
+                <td>{{dispatch.dispatchIdPk}}</td>
+                <td>{{dispatch.dcIdFk}}</td>
+                <td>{{dispatch.storeIdFk}}</td>
                 <td>{{dispatch.dispatchDate}}</td>
-                <td>{{dispatch.statusId}}</td>
+                <td>{{dispatch.dispatchStatusIdFk}}</td>
 
             </tr>
 
