@@ -1,5 +1,92 @@
 import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+
+import { DispatchTracking } from '../../../../model/dispatch.model';
+import { DispatchService } from '../../../../service/dispatch/dispatch.service';
+
+@Component({
+  selector: 'mlp-fetch-dispatch-by-id',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule],
+  templateUrl: './fetch-dispatch-by-id.component.html',
+  styleUrl: './fetch-dispatch-by-id.component.scss'
+})
+export class FetchDispatchByIdComponent {
+
+  fetchForm: any;
+
+  selectedDispatch: DispatchTracking | null = null;
+
+  noRecord = false;
+
+  constructor(
+    private fb: FormBuilder,
+    private dispatchService: DispatchService
+  ) {
+
+    this.fetchForm = this.fb.group({
+
+      dispatchId: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern('^[0-9]+$')
+        ]
+      ]
+
+    });
+
+  }
+
+  search(): void {
+
+    if (this.fetchForm.invalid) {
+
+      this.fetchForm.markAllAsTouched();
+      return;
+
+    }
+
+    const id = Number(this.fetchForm.value.dispatchId);
+
+    this.dispatchService.getDispatchById(id).subscribe({
+
+      next: (response) => {
+
+        this.selectedDispatch = response;
+
+        this.noRecord = false;
+
+      },
+
+      error: (error) => {
+
+        console.error(error);
+
+        this.selectedDispatch = null;
+
+        this.noRecord = true;
+
+      }
+
+    });
+
+  }
+
+  reset(): void {
+
+    this.fetchForm.reset();
+
+    this.selectedDispatch = null;
+
+    this.noRecord = false;
+
+  }
+
+}
+/*import { Component } from '@angular/core';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'mlp-fetch-dispatch-by-id',
@@ -97,3 +184,4 @@ export class FetchDispatchByIdComponent {
   }
 
 }
+*/

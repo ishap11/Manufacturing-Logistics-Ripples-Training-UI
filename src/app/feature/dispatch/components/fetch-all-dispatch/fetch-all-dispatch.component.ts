@@ -1,4 +1,54 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { DispatchTracking } from '../../../../model/dispatch.model';
+import { DispatchService } from '../../../../service/dispatch/dispatch.service';
+
+@Component({
+  selector: 'mlp-fetch-all-dispatch',
+  imports: [CommonModule],
+  templateUrl: './fetch-all-dispatch.component.html',
+  styleUrl: './fetch-all-dispatch.component.scss'
+})
+export class FetchAllDispatchComponent implements OnInit {
+
+  dispatches: DispatchTracking[] = [];
+
+  noRecords = false;
+  errorMessage = '';
+
+  constructor(private dispatchService: DispatchService) { }
+
+  ngOnInit(): void {
+
+    this.dispatchService.getDispatches().subscribe({
+
+      next: (response) => {
+
+        this.dispatches = response;
+
+        this.noRecords = response.length === 0;
+
+        this.errorMessage = '';
+
+      },
+
+      error: () => {
+
+        this.dispatches = [];
+
+        this.noRecords = false;
+
+        this.errorMessage = 'Unable to load dispatch records.';
+
+      }
+
+    });
+
+  }
+
+}
+/*import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -38,3 +88,4 @@ export class FetchAllDispatchComponent {
   ];
 
 }
+*/

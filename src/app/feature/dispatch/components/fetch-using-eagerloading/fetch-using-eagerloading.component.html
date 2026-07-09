@@ -20,19 +20,19 @@
 
         <tbody>
 
-            @for(dispatch of dispatches; track dispatch.dispatchId){
+            @for(dispatch of dispatches; track dispatch.dispatchIdPk){
 
             <tr>
 
-                <td>{{dispatch.dispatchId}}</td>
+                <td>{{dispatch.dispatchIdPk}}</td>
 
-                <td>{{dispatch.dcId}}</td>
+                <td>{{dispatch.dcIdFk}}</td>
 
-                <td>{{dispatch.storeId}}</td>
+                <td>{{dispatch.storeIdFk}}</td>
 
                 <td>{{dispatch.dispatchDate}}</td>
 
-                <td>{{dispatch.statusName}}</td>
+                <td>{{ dispatch.dispatchStatusName }}</td>
 
             </tr>
 
