@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+import { ProcurementService } from '../../../../service/procurement/procurement.service';
+import { LazyPurchaseOrder } from '../../../../model/procurement.model';
 
 @Component({
   selector: 'app-fetch-using-lazy-loading',
@@ -8,28 +11,79 @@ import { CommonModule } from '@angular/common';
   templateUrl: './fetch-using-lazy-loading.component.html',
   styleUrl: './fetch-using-lazy-loading.component.css'
 })
-export class FetchUsingLazyLoadingComponent {
+export class FetchUsingLazyLoadingComponent implements OnInit{
 
-  purchaseOrders = [
+  constructor(
+  private procurementService: ProcurementService
+) {}
 
-    {
-      purchaseOrderIdPk: 101,
-      supplierIdFk: 5,
-      productIds: [17, 18, 20]
-    },
+  purchaseOrders: LazyPurchaseOrder[] = [];
 
-    {
-      purchaseOrderIdPk: 102,
-      supplierIdFk: 8,
-      productIds: [22, 25]
-    },
+errorMessage = '';
 
-    {
-      purchaseOrderIdPk: 103,
-      supplierIdFk: 12,
-      productIds: [31, 32, 33, 34]
-    }
+ngOnInit(): void {
 
-  ];
+  this.purchaseOrders = [];
+
+  this.errorMessage = '';
+
+  this.procurementService
+    .fetchUsingLazyLoading()
+    .subscribe({
+
+      next: (response) => {
+
+        const groupedOrders: LazyPurchaseOrder[] = [];
+
+        response.forEach(item => {
+
+          let order = groupedOrders.find(
+            x => x.purchaseOrderIdPk === item.purchaseOrderIdPk
+          );
+
+          if (!order) {
+
+            order = {
+
+              purchaseOrderIdPk: item.purchaseOrderIdPk,
+
+              supplierIdFk: item.supplierIdFk,
+
+              productName: []
+
+            };
+
+            groupedOrders.push(order);
+
+          }
+
+          order.productName.push(item.productName);
+
+        });
+
+        this.purchaseOrders = groupedOrders;
+
+        if (this.purchaseOrders.length === 0) {
+
+          this.errorMessage = 'No Purchase Orders found.';
+
+        }
+
+      },
+
+      error: (error) => {
+
+        console.error(error);
+
+        this.purchaseOrders = [];
+
+        this.errorMessage =
+          error.error || 'Unable to fetch Purchase Orders.';
+
+      }
+
+    });
+
+}
 
 }

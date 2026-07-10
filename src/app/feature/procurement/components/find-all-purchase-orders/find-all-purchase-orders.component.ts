@@ -1,5 +1,11 @@
-import { Component } from '@angular/core';
+/*import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';*/
+
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+import { ProcurementService } from '../../../../service/procurement/procurement.service';
+import { ProcurementPurchaseOrder } from '../../../../model/procurement.model';
 
 @Component({
   selector: 'app-find-all-purchase-orders',
@@ -8,9 +14,49 @@ import { CommonModule } from '@angular/common';
   templateUrl: './find-all-purchase-orders.component.html',
   styleUrl: './find-all-purchase-orders.component.css'
 })
-export class FindAllPurchaseOrdersComponent {
+/*export class FindAllPurchaseOrdersComponent {*/
+export class FindAllPurchaseOrdersComponent implements OnInit {
 
-  purchaseOrders = [
+  purchaseOrders: ProcurementPurchaseOrder[] = [];
+
+  errorMessage = '';
+
+  constructor(
+  private procurementService: ProcurementService
+) { }
+
+ngOnInit(): void {
+
+  this.purchaseOrders = [];
+
+  this.errorMessage = '';
+
+  this.procurementService
+    .getAllPurchaseOrders()
+    .subscribe({
+
+      next: (response) => {
+
+        this.purchaseOrders = response;
+
+      },
+
+      error: (error) => {
+
+        console.error(error);
+
+        this.purchaseOrders = [];
+
+        this.errorMessage =
+          error.error || 'Unable to fetch Purchase Orders.';
+
+      }
+
+    });
+
+}
+
+  /*purchaseOrders = [
 
     {
       purchaseOrderIdPk: 1,
@@ -39,6 +85,6 @@ export class FindAllPurchaseOrdersComponent {
       expectedDeliveryDate: '2026-06-14'
     }
 
-  ];
+  ];*/
 
 }

@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 
+import { ProcurementService } from '../../../../service/procurement/procurement.service';
+import { ProcurementPurchaseOrder } from '../../../../model/procurement.model';
+
 @Component({
   selector: 'app-add-purchase-order-with-items',
   standalone: true,
@@ -10,6 +13,10 @@ import { FormsModule, NgForm } from '@angular/forms';
   styleUrl: './add-purchase-order-with-items.component.css'
 })
 export class AddPurchaseOrderWithItemsComponent {
+
+  constructor(
+  private procurementService: ProcurementService
+) { }
 
   today = new Date().toISOString().split('T')[0];
 
@@ -42,6 +49,10 @@ export class AddPurchaseOrderWithItemsComponent {
 
   };
 
+  successMessage = '';
+
+errorMessage = '';
+
   addItem() {
 
     this.purchaseOrder.itemList.push({
@@ -70,19 +81,44 @@ export class AddPurchaseOrderWithItemsComponent {
 
   savePurchaseOrder(form: NgForm) {
 
-    if (form.invalid) {
+  if (form.invalid) {
 
-      form.control.markAllAsTouched();
+    form.control.markAllAsTouched();
 
-      return;
-
-    }
-
-    console.log(this.purchaseOrder);
-
-    alert("Purchase Order with Items Saved Successfully");
+    return;
 
   }
+
+  this.successMessage = '';
+
+  this.errorMessage = '';
+
+  this.procurementService
+    .insertPurchaseOrderWithItems(
+      this.purchaseOrder as ProcurementPurchaseOrder
+    )
+    .subscribe({
+
+      next: (response: string) => {
+
+        this.successMessage = response;
+
+        this.resetForm(form);
+
+      },
+
+      error: (error) => {
+
+        console.error(error);
+
+        this.errorMessage =
+          error.error || 'Unable to save Purchase Order with Items.';
+
+      }
+
+    });
+
+}
 
   resetForm(form: NgForm) {
 

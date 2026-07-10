@@ -58,7 +58,7 @@
 
     </form>
 
-    <div *ngIf="searched">
+    <div *ngIf="searched && productNames.length > 0">
 
         <h3>Products</h3>
 
@@ -82,7 +82,7 @@
 
                     <td>{{i + 1}}</td>
 
-                    <td>{{product}}</td>
+                    <td>{{product.productName}}</td>
 
                 </tr>
 
@@ -91,5 +91,13 @@
         </table>
 
     </div>
+
+    <div
+    class="error"
+    *ngIf="errorMessage">
+
+    {{ errorMessage }}
+
+</div>
 
 </div>

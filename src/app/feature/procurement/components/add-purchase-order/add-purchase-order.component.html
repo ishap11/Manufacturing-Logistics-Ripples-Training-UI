@@ -185,4 +185,20 @@
 
     </form>
 
+    <div
+    class="success"
+    *ngIf="successMessage">
+
+    {{ successMessage }}
+
+</div>
+
+<div
+    class="error"
+    *ngIf="errorMessage">
+
+    {{ errorMessage }}
+
+</div>
+
 </div>

@@ -1,4 +1,8 @@
 import { Component } from '@angular/core';
+
+import { ProcurementService } from '../../../../service/procurement/procurement.service';
+
+import { ProcurementPurchaseOrder } from '../../../../model/procurement.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 
@@ -10,6 +14,10 @@ import { FormsModule, NgForm } from '@angular/forms';
   styleUrl: './add-purchase-order.component.css'
 })
 export class AddPurchaseOrderComponent {
+
+  constructor(
+  private procurementService: ProcurementService
+) { }
 
   today: string = new Date().toISOString().split('T')[0];
 
@@ -26,15 +34,48 @@ export class AddPurchaseOrderComponent {
     expectedDeliveryDate: ''
   };
 
+  successMessage = '';
+
+errorMessage = '';
+
   savePurchaseOrder(form: NgForm) {
 
-    if (form.invalid) {
-      form.control.markAllAsTouched();
-      return;
-    }
+  if (form.invalid) {
 
-    console.log(this.purchaseOrder);
+    form.control.markAllAsTouched();
+
+    return;
+
   }
+
+  this.successMessage = '';
+
+  this.errorMessage = '';
+
+  this.procurementService
+    .insertPurchaseOrder(
+      this.purchaseOrder as ProcurementPurchaseOrder
+    )
+    .subscribe({
+
+      next: (response: string) => {
+
+        this.successMessage = response;
+
+      },
+
+      error: (error) => {
+
+        console.error(error);
+
+        this.errorMessage =
+          error.error || 'Unable to save Purchase Order.';
+
+      }
+
+    });
+
+}
 
    resetForm(form: NgForm) {
 
@@ -46,6 +87,10 @@ export class AddPurchaseOrderComponent {
       purchaseOrderDate: this.today,
       expectedDeliveryDate: ''
     });
+
+    this.successMessage = '';
+
+    this.errorMessage = '';
 
   }
 
