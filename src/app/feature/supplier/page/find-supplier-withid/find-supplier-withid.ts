@@ -15,6 +15,8 @@ export class FindSupplierWithid {
   supplierId: number | null = null;
   supplier?: Supplier;
   searched = false;
+  isLoading = false;
+  errorMessage = '';
 
   constructor(private supplierService: SupplierService) {}
 
@@ -25,10 +27,12 @@ export class FindSupplierWithid {
       return;
     }
 
-    this.supplierService.getSupplierById(this.supplierId).subscribe(supplier => {
-      this.supplier = supplier;
-      this.searched = true;
-    });
+    this.isLoading = true; this.errorMessage = '';
+    this.supplierService.getSupplierById(this.supplierId).subscribe({ next: supplier => {
+      this.supplier = supplier; this.searched = true; this.isLoading = false;
+    }, error: error => {
+      this.supplier = undefined; this.searched = true; this.errorMessage = error.message; this.isLoading = false;
+    }});
   }
 
 }

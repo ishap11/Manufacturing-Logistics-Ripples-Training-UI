@@ -12,13 +12,17 @@ import { SupplierService } from '../../../../service/supplier/supplier.service';
 })
 export class FindAllsupplier implements OnInit {
   suppliers: Supplier[] = [];
+  isLoading = true;
+  errorMessage = '';
 
   constructor(private supplierService: SupplierService) {}
 
   ngOnInit(): void {
-    this.supplierService.getSuppliers().subscribe(suppliers => {
-      this.suppliers = suppliers;
-    });
+    this.supplierService.getSuppliers().subscribe({ next: suppliers => {
+      this.suppliers = suppliers; this.isLoading = false;
+    }, error: error => {
+      this.errorMessage = error.message; this.isLoading = false;
+    }});
   }
 
 }

@@ -15,6 +15,8 @@ export class FilterSupplierWithCityname {
   cityName = '';
   suppliers: Supplier[] = [];
   searched = false;
+  isLoading = false;
+  errorMessage = '';
 
   constructor(private supplierService: SupplierService) {}
 
@@ -26,10 +28,12 @@ export class FilterSupplierWithCityname {
       return;
     }
 
-    this.supplierService.getSuppliersByCity(city).subscribe(suppliers => {
-      this.suppliers = suppliers;
-      this.searched = true;
-    });
+    this.isLoading = true; this.errorMessage = '';
+    this.supplierService.getSuppliersByCity(city).subscribe({ next: suppliers => {
+      this.suppliers = suppliers; this.searched = true; this.isLoading = false;
+    }, error: error => {
+      this.suppliers = []; this.searched = true; this.errorMessage = error.message; this.isLoading = false;
+    }});
   }
 
 }
