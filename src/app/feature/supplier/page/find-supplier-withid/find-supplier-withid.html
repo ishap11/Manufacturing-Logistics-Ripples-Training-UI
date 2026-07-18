@@ -14,10 +14,6 @@
   @if (isLoading) { <p class="message">Loading supplier...</p> }
   @if (errorMessage) { <p class="message">{{ errorMessage }}</p> }
 
-  @if (searched && !supplier) {
-    <p class="message">No supplier found for ID {{ supplierId }}.</p>
-  }
-
   @if (supplier) {
     <article class="supplier-card">
       <div class="card-header">

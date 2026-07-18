@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { UpdateSupplierComponent } from './update-supplier.component';
 
 describe('UpdateSupplierComponent', () => {
@@ -8,7 +9,11 @@ describe('UpdateSupplierComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UpdateSupplierComponent]
+      imports: [UpdateSupplierComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting()
+      ]
     })
     .compileComponents();
 

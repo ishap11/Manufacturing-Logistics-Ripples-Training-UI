@@ -1,19 +1,75 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm, NgModel } from '@angular/forms';
 import { SupplierUpdate } from '../../../../model/supplier.model';
 import { SupplierApiError, SupplierService } from '../../../../service/supplier/supplier.service';
+import { SupplierDropdownService } from '../../../../service/supplier/supplier-dropdown.service';
 
 @Component({ standalone: true, selector: 'mlp-update-supplier', imports: [FormsModule], templateUrl: './update-supplier.component.html', styleUrl: './update-supplier.component.scss' })
-export class UpdateSupplierComponent {
+export class UpdateSupplierComponent implements OnInit {
   supplierId: number | null = null;
   supplier = this.createEmptySupplier();
   message = ''; errorMessage = ''; fieldErrors: Record<string, string[]> = {}; submitted = false; isLoading = false;
-  constructor(private readonly supplierService: SupplierService) {}
+
+  supplierTypes: string[] = [];
+  countries: string[] = [];
+  states: string[] = [];
+  cities: string[] = [];
+
+  constructor(
+    private readonly supplierService: SupplierService,
+    private readonly dropdownService: SupplierDropdownService
+  ) {}
+
+  ngOnInit(): void {
+    this.dropdownService.getSupplierTypes().subscribe(types => this.supplierTypes = types);
+    this.dropdownService.getCountries().subscribe(countries => this.countries = countries);
+  }
+
+  onCountryChange(country: string): void {
+    this.supplier.state = '';
+    this.supplier.city = '';
+    this.states = [];
+    this.cities = [];
+    if (country) {
+      this.dropdownService.getStates(country).subscribe(states => this.states = states);
+    }
+    this.clearFieldError('country');
+  }
+
+  onStateChange(state: string): void {
+    this.supplier.city = '';
+    this.cities = [];
+    if (state) {
+      this.dropdownService.getCities(state).subscribe(cities => this.cities = cities);
+    }
+    this.clearFieldError('state');
+  }
+
+  onCityChange(city: string): void {
+    this.clearFieldError('city');
+  }
 
   loadSupplier(): void {
     if (!this.supplierId || this.supplierId < 1) { this.errorMessage = 'Enter a valid supplier ID.'; return; }
     this.isLoading = true; this.errorMessage = ''; this.fieldErrors = {};
-    this.supplierService.getSupplierById(this.supplierId).subscribe({ next: supplier => { this.supplier = supplier; this.isLoading = false; }, error: (error: SupplierApiError) => this.setApiError(error) });
+    this.supplierService.getSupplierById(this.supplierId).subscribe({
+      next: supplier => {
+        this.supplier = supplier;
+        this.isLoading = false;
+        // Populate cascading dropdown options based on the loaded supplier
+        if (this.supplier.country) {
+          this.dropdownService.getStates(this.supplier.country).subscribe(states => this.states = states);
+        } else {
+          this.states = [];
+        }
+        if (this.supplier.state) {
+          this.dropdownService.getCities(this.supplier.state).subscribe(cities => this.cities = cities);
+        } else {
+          this.cities = [];
+        }
+      },
+      error: (error: SupplierApiError) => this.setApiError(error)
+    });
   }
 
   updateSupplier(form: NgForm): void {

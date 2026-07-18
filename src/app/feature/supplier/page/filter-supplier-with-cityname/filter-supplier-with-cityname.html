@@ -14,10 +14,6 @@
   @if (isLoading) { <p class="message">Loading suppliers...</p> }
   @if (errorMessage) { <p class="message">{{ errorMessage }}</p> }
 
-  @if (searched && suppliers.length === 0) {
-    <p class="message">No suppliers found for {{ cityName }}.</p>
-  }
-
   <!-- <div class="supplier-grid">
     @for (supplier of suppliers; track supplier.supplierId) {
       <article class="supplier-card">

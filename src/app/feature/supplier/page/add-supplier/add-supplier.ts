@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgForm, NgModel } from '@angular/forms';
 import { SupplierCreate } from '../../../../model/supplier.model';
 import { SupplierApiError, SupplierService } from '../../../../service/supplier/supplier.service';
+import { SupplierDropdownService } from '../../../../service/supplier/supplier-dropdown.service';
 
 @Component({ selector: 'mlp-add-supplier', imports: [FormsModule], templateUrl: './add-supplier.html', styleUrl: './add-supplier.scss' })
-export class AddSupplier {
+export class AddSupplier implements OnInit {
   supplier: SupplierCreate = this.createEmptySupplier();
   message = '';
   errorMessage = '';
@@ -12,7 +13,44 @@ export class AddSupplier {
   submitted = false;
   isLoading = false;
 
-  constructor(private readonly supplierService: SupplierService) {}
+  supplierTypes: string[] = [];
+  countries: string[] = [];
+  states: string[] = [];
+  cities: string[] = [];
+
+  constructor(
+    private readonly supplierService: SupplierService,
+    private readonly dropdownService: SupplierDropdownService
+  ) {}
+
+  ngOnInit(): void {
+    this.dropdownService.getSupplierTypes().subscribe(types => this.supplierTypes = types);
+    this.dropdownService.getCountries().subscribe(countries => this.countries = countries);
+  }
+
+  onCountryChange(country: string): void {
+    this.supplier.state = '';
+    this.supplier.city = '';
+    this.states = [];
+    this.cities = [];
+    if (country) {
+      this.dropdownService.getStates(country).subscribe(states => this.states = states);
+    }
+    this.clearFieldError('country');
+  }
+
+  onStateChange(state: string): void {
+    this.supplier.city = '';
+    this.cities = [];
+    if (state) {
+      this.dropdownService.getCities(state).subscribe(cities => this.cities = cities);
+    }
+    this.clearFieldError('state');
+  }
+
+  onCityChange(city: string): void {
+    this.clearFieldError('city');
+  }
 
   addSupplier(form: NgForm): void {
     this.submitted = true;
@@ -24,6 +62,8 @@ export class AddSupplier {
       next: supplier => {
         this.message = `Supplier ${supplier.contactPerson} added successfully with ID ${supplier.supplierId}.`;
         this.isLoading = false; this.submitted = false; form.resetForm(); this.supplier = this.createEmptySupplier();
+        this.states = [];
+        this.cities = [];
       },
       error: (error: SupplierApiError) => this.setApiError(error)
     });

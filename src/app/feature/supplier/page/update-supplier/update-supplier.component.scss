@@ -30,6 +30,7 @@ label {
 }
 
 input,
+select,
 textarea {
   width: 100%;
   border: 1px solid #d1d5db;
@@ -46,6 +47,7 @@ textarea {
   color: #b91c1c;
 
   input,
+  select,
   textarea {
     border-color: #dc2626;
   }

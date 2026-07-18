@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { FindAllsupplier } from './find-allsupplier';
 
 describe('FindAllsupplier', () => {
@@ -8,7 +9,11 @@ describe('FindAllsupplier', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FindAllsupplier]
+      imports: [FindAllsupplier],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting()
+      ]
     })
     .compileComponents();
 
