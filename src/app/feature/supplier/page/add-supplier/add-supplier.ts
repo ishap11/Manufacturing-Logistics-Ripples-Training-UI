@@ -41,7 +41,7 @@ export class AddSupplier {
       return 'Invalid value.';
     }
     if (control.errors?.['minlength']) return `${this.fieldLabel(field)} must contain at least 3 characters.`;
-    if (control.errors?.['min'] || control.errors?.['max']) return 'Age must be between 18 and 70.';
+    if (control.errors?.['min'] || control.errors?.['max']) return 'Age must be greater than 18 ';
     return 'Invalid value.';
   }
 
@@ -53,5 +53,5 @@ export class AddSupplier {
 
   private setApiError(error: SupplierApiError): void { this.fieldErrors = error.fieldErrors ?? {}; this.errorMessage = error.message; this.isLoading = false; }
   private fieldLabel(field: string): string { return ({ companyName: 'Supplier Name', contactPerson: 'Contact Person', supplierType: 'Supplier Type', phone: 'Phone Number', pincode: 'Pincode', address: 'Address', city: 'City', state: 'State', country: 'Country' } as Record<string, string>)[field] ?? field[0].toUpperCase() + field.slice(1); }
-  private createEmptySupplier(): SupplierCreate { return { companyName: '', contactPerson: '', age: 18, phone: '', email: '', supplierType: '', address: '', city: '', state: '', country: '', pincode: '' }; }
+  private createEmptySupplier(): SupplierCreate { return { companyName: '', contactPerson: '', age: 0, phone: '', email: '', supplierType: '', address: '', city: '', state: '', country: '', pincode: '' }; }
 }
