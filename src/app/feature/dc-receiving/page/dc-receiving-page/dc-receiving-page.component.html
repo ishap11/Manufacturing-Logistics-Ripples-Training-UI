@@ -156,8 +156,8 @@
                       [class.text-muted]="!row.get('isManual')?.value || modalMode === 'view'">
                     @if (row.get('isManual')?.value && modalMode !== 'view') {
                       <input type="number" formControlName="orderedQty" class="form-control text-center"
-                        [class.is-invalid]="(row.get('orderedQty')?.touched || row.get('receivedQty')?.touched || submitted) && (row.get('orderedQty')?.invalid || row.errors?.['receivedExceedsOrdered'])" />
-                      @if ((row.get('orderedQty')?.touched || row.get('receivedQty')?.touched || submitted) && row.get('orderedQty')?.invalid) {
+                        [class.is-invalid]="(row.get('orderedQty')?.touched || row.get('receivedQty')?.touched || row.get('damagedQty')?.touched || submitted) && (row.get('orderedQty')?.invalid || row.errors?.['receivedMismatchOrdered'])" />
+                      @if ((row.get('orderedQty')?.touched || row.get('receivedQty')?.touched || row.get('damagedQty')?.touched || submitted) && row.get('orderedQty')?.invalid) {
                         @if (row.get('orderedQty')?.hasError('required')) {
                         <div class="invalid-feedback d-block">Required</div>
                         } @else if (row.get('orderedQty')?.hasError('min')) {
@@ -172,14 +172,18 @@
                   <!-- Received Qty (Numeric Input) -->
                   <td>
                     <input type="number" formControlName="receivedQty" class="form-control text-center"
-                      [class.is-invalid]="(row.get('receivedQty')?.touched || row.get('orderedQty')?.touched || row.get('damagedQty')?.touched || submitted) && (row.get('receivedQty')?.invalid || row.errors?.['receivedExceedsOrdered'] || row.errors?.['damagedExceedsReceived'])" />
+                      [class.is-invalid]="(row.get('receivedQty')?.touched || row.get('orderedQty')?.touched || row.get('damagedQty')?.touched || submitted) && (row.get('receivedQty')?.invalid || row.errors?.['receivedMismatchOrdered'])" />
                     @if ((row.get('receivedQty')?.touched || row.get('orderedQty')?.touched || row.get('damagedQty')?.touched || submitted)) {
                       @if (row.get('receivedQty')?.hasError('required')) {
                       <div class="invalid-feedback d-block">Required</div>
                       } @else if (row.get('receivedQty')?.hasError('min')) {
                       <div class="invalid-feedback d-block">Min 0</div>
-                      } @else if (row.errors?.['receivedExceedsOrdered']) {
-                      <div class="invalid-feedback d-block">Cannot exceed Ordered Qty ({{ row.get('orderedQty')?.value }})</div>
+                      } @else if (row.errors?.['receivedMismatchOrdered']) {
+                        @if (row.get('receivedQty')?.value + row.get('damagedQty')?.value < row.get('orderedQty')?.value) {
+                        <div class="invalid-feedback d-block">Total is less than Ordered Qty. Missing {{ row.get('orderedQty')?.value - (row.get('receivedQty')?.value + row.get('damagedQty')?.value) }} item(s).</div>
+                        } @else {
+                        <div class="invalid-feedback d-block">Total exceeds Ordered Qty by {{ (row.get('receivedQty')?.value + row.get('damagedQty')?.value) - row.get('orderedQty')?.value }} item(s).</div>
+                        }
                       }
                     }
                   </td>
@@ -187,14 +191,18 @@
                   <!-- Damaged Qty (Numeric Input) -->
                   <td>
                     <input type="number" formControlName="damagedQty" class="form-control text-center"
-                      [class.is-invalid]="(row.get('damagedQty')?.touched || row.get('receivedQty')?.touched || submitted) && (row.get('damagedQty')?.invalid || row.errors?.['damagedExceedsReceived'])" />
-                    @if ((row.get('damagedQty')?.touched || row.get('receivedQty')?.touched || submitted)) {
+                      [class.is-invalid]="(row.get('damagedQty')?.touched || row.get('receivedQty')?.touched || row.get('orderedQty')?.touched || submitted) && (row.get('damagedQty')?.invalid || row.errors?.['receivedMismatchOrdered'])" />
+                    @if ((row.get('damagedQty')?.touched || row.get('receivedQty')?.touched || row.get('orderedQty')?.touched || submitted)) {
                       @if (row.get('damagedQty')?.hasError('required')) {
                       <div class="invalid-feedback d-block">Required</div>
                       } @else if (row.get('damagedQty')?.hasError('min')) {
                       <div class="invalid-feedback d-block">Min 0</div>
-                      } @else if (row.errors?.['damagedExceedsReceived']) {
-                      <div class="invalid-feedback d-block">Cannot exceed Received Qty ({{ row.get('receivedQty')?.value }})</div>
+                      } @else if (row.errors?.['receivedMismatchOrdered']) {
+                        @if (row.get('receivedQty')?.value + row.get('damagedQty')?.value < row.get('orderedQty')?.value) {
+                        <div class="invalid-feedback d-block">Total is less than Ordered Qty. Missing {{ row.get('orderedQty')?.value - (row.get('receivedQty')?.value + row.get('damagedQty')?.value) }} item(s).</div>
+                        } @else {
+                        <div class="invalid-feedback d-block">Total exceeds Ordered Qty by {{ (row.get('receivedQty')?.value + row.get('damagedQty')?.value) - row.get('orderedQty')?.value }} item(s).</div>
+                        }
                       }
                     }
                   </td>

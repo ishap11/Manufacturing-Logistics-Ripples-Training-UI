@@ -18,11 +18,8 @@ export function rowValidator(group: AbstractControl): ValidationErrors | null {
 
   const errors: ValidationErrors = {};
 
-  if (receivedQty > orderedQty) {
-    errors['receivedExceedsOrdered'] = true;
-  }
-  if (damagedQty > receivedQty) {
-    errors['damagedExceedsReceived'] = true;
+  if (receivedQty + damagedQty !== orderedQty) {
+    errors['receivedMismatchOrdered'] = true;
   }
 
   return Object.keys(errors).length > 0 ? errors : null;
