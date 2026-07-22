@@ -1,12 +1,12 @@
 <div class="store-page-container">
   <app-page-header
     title="Update Store Profile"
-    description="Find a store and update manager, address, region and operational status details."
+    description="Find a store by ID and update its details."
   ></app-page-header>
 
   <div class="card p-3 mb-4">
     <app-search-box
-      placeholder="Find store by id, code or name before updating..."
+      placeholder="Enter Store ID to find before updating..."
       (search)="findStore($event)"
     ></app-search-box>
   </div>
@@ -19,56 +19,31 @@
     <div class="card p-3">
       <div class="selected-store">
         <div>
-          <div class="text-bold text-primary">{{ selectedStore.Store_Code }}</div>
-          <div class="text-muted">Store Id {{ selectedStore.Store_Id_PK }}</div>
+          <div class="text-bold text-primary">{{ selectedStore.storeCode }}</div>
+          <div class="text-muted">Store Id {{ selectedStore.storeIdPk }}</div>
         </div>
-        <app-status-badge [status]="selectedStore.status"></app-status-badge>
       </div>
 
       <form [formGroup]="updateForm" (ngSubmit)="updateStore()" class="store-form">
         <div class="form-grid">
           <label class="form-field">
             <span>Store Name</span>
-            <input type="text" formControlName="Store_Name" />
+            <input type="text" formControlName="StoreName" />
           </label>
 
           <label class="form-field">
             <span>Manager Id</span>
-            <input type="number" formControlName="Store_Manager_Id_Fk" />
-          </label>
-
-          <label class="form-field">
-            <span>Manager Name</span>
-            <input type="text" formControlName="managerName" />
-          </label>
-
-          <label class="form-field">
-            <span>Address Id</span>
-            <input type="number" formControlName="Address_Id_FK" />
+            <input type="number" formControlName="ManagersIdFk" />
           </label>
 
           <label class="form-field">
             <span>Status Id</span>
-            <input type="number" formControlName="Store_Status_Id_FK" />
+            <input type="number" formControlName="StoreStatusIdFk" />
           </label>
 
           <label class="form-field">
-            <span>City</span>
-            <input type="text" formControlName="city" />
-          </label>
-
-          <label class="form-field">
-            <span>Region</span>
-            <input type="text" formControlName="region" />
-          </label>
-
-          <label class="form-field">
-            <span>Status</span>
-            <select formControlName="status">
-              <option value="Active">Active</option>
-              <option value="Inactive">Inactive</option>
-              <option value="Pending">Pending</option>
-            </select>
+            <span>Updated By User Id</span>
+            <input type="number" formControlName="UpdatedByUserIdFk" />
           </label>
         </div>
 
@@ -85,14 +60,19 @@
     <app-empty-state
       icon="fa-store-slash"
       title="Store Not Found"
-      description="Search with another store id, store code or store name."
+      description="Search with another Store ID."
     ></app-empty-state>
   }
 
-  @if (updatedStore) {
+  @if (successMessage) {
     <div class="card p-3 mt-3">
-      <span class="text-bold text-success">{{ updatedStore.Store_Name }}</span>
-      <span class="text-muted"> updated at {{ updatedStore.Updated_DateTime }}</span>
+      <div class="text-bold text-success">{{ successMessage }}</div>
+    </div>
+  }
+
+  @if (errorMessage) {
+    <div class="card p-3 mt-3">
+      <div class="text-bold text-danger">{{ errorMessage }}</div>
     </div>
   }
 </div>
