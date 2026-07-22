@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { Shipment, Warehouse, Receiving } from '../model/receiving.model';
+import { Shipment, Warehouse, Receiving, AvailableProduct } from '../model/receiving.model';
 import { environment } from '../../../../environments/environment';
 
 @Injectable({
@@ -32,6 +32,18 @@ export class ReceivingService {
 
   getWarehouses(): Observable<Warehouse[]> {
     return this.http.get<Warehouse[]>(`${this.apiUrl}/warehouses`);
+  }
+
+  getProducts(): Observable<AvailableProduct[]> {
+    return this.http.get<AvailableProduct[]>(`${this.apiUrl}/products`);
+  }
+
+  getReceivingStatuses(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/receiving-statuses`);
+  }
+
+  getQcStatuses(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/qc-statuses`);
   }
 
   getById(receivingId: string): Observable<Receiving | undefined> {

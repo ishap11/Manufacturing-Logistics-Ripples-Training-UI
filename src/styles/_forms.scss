@@ -188,3 +188,24 @@ select.form-control {
     color: var(--color-text-secondary);
   }
 }
+
+// Validation States
+.invalid-feedback {
+  color: #EF4444; /* Standard alert red */
+  font-size: 0.75rem;
+  margin-top: 4px;
+  display: none;
+
+  &.d-block {
+    display: block;
+  }
+}
+
+.is-invalid {
+  border-color: #EF4444 !important;
+  
+  &:focus {
+    border-color: #EF4444 !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+  }
+}

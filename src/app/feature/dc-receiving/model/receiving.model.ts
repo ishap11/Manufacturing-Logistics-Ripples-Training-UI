@@ -17,12 +17,19 @@ export interface Warehouse {
   name: string;
 }
 
+export interface AvailableProduct {
+  id: string;
+  name: string;
+}
+
 export interface ReceivingItem {
-  productName: string;
+  productId: string;
+  productName?: string;
   orderedQty: number;
   receivedQty: number;
   damagedQty: number;
-  qcStatus: 'Pending' | 'Passed' | 'Failed';
+  qcStatus: string;
+  isManual?: boolean;
 }
 
 export interface Receiving {
@@ -31,7 +38,7 @@ export interface Receiving {
   warehouse: string;
   totalProducts: number;
   totalQuantity: number;
-  status: 'Pending' | 'Completed' | 'Cancelled';
+  status: string;
   createdDate: string;
   items: ReceivingItem[];
 }

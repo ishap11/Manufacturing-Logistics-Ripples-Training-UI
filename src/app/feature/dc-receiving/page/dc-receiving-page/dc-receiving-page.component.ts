@@ -9,7 +9,7 @@ import { ConfirmationModalComponent } from '../../../../common/component/confirm
 import { DataTableComponent } from '../../component/data-table/data-table.component';
 import { TableCellDirective } from '../../directive/table-cell.directive';
 import { ReceivingService } from '../../service/receiving.service';
-import { Receiving, ReceivingItem, Shipment, Warehouse, TableConfig } from '../../model/receiving.model';
+import { Receiving, ReceivingItem, Shipment, Warehouse, TableConfig, AvailableProduct } from '../../model/receiving.model';
 
 export function rowValidator(group: AbstractControl): ValidationErrors | null {
   const orderedQty = group.get('orderedQty')?.value ?? 0;
@@ -18,7 +18,7 @@ export function rowValidator(group: AbstractControl): ValidationErrors | null {
 
   const errors: ValidationErrors = {};
 
-  if (orderedQty > 0 && receivedQty > orderedQty) {
+  if (receivedQty > orderedQty) {
     errors['receivedExceedsOrdered'] = true;
   }
   if (damagedQty > receivedQty) {
@@ -100,16 +100,10 @@ export class DcReceivingPageComponent implements OnInit {
   isDeleteModalOpen = false;
   receivingToDelete: Receiving | null = null;
 
-  // Options
-  statusOptions = ['All', 'Pending', 'Completed', 'Cancelled'];
-  qcStatusOptions = ['Pending', 'Passed', 'Failed'];
-  availableProductNames = [
-    'Precision Drill Bit',
-    'Steel Rod',
-    'Bearing',
-    'Hydraulic Pump',
-    'Safety Gloves'
-  ];
+  // Options — populated from API (Catalog / Product tables)
+  statusOptions: string[] = ['All'];
+  qcStatusOptions: string[] = [];
+  availableProducts: AvailableProduct[] = [];
 
   ngOnInit(): void {
     this.initForm();
@@ -130,19 +124,21 @@ export class DcReceivingPageComponent implements OnInit {
   }
 
   createProductRow(
-    productName = '',
+    productId = '',
     orderedQty = 0,
     receivedQty = 0,
     damagedQty = 0,
-    qcStatus: 'Pending' | 'Passed' | 'Failed' = 'Pending'
+    qcStatus = 'Pending',
+    isManual = false
   ): FormGroup {
     return this.fb.group(
       {
-        productName: [productName, Validators.required],
-        orderedQty: [orderedQty],
+        productId: [productId, Validators.required],
+        orderedQty: [orderedQty, [Validators.required, Validators.min(0)]],
         receivedQty: [receivedQty, [Validators.required, Validators.min(0)]],
         damagedQty: [damagedQty, [Validators.required, Validators.min(0)]],
-        qcStatus: [qcStatus, Validators.required]
+        qcStatus: [qcStatus, Validators.required],
+        isManual: [isManual]
       },
       { validators: rowValidator }
     );
@@ -152,7 +148,7 @@ export class DcReceivingPageComponent implements OnInit {
     this.loading = true;
     this.cdr.markForCheck();
 
-    // Fetch lists
+    // Fetch lists from API
     this.receivingService.getShipments().subscribe(res => {
       this.shipments = res;
       this.cdr.markForCheck();
@@ -160,6 +156,26 @@ export class DcReceivingPageComponent implements OnInit {
 
     this.receivingService.getWarehouses().subscribe(res => {
       this.warehouses = res;
+      this.cdr.markForCheck();
+    });
+
+    this.receivingService.getProducts().subscribe(res => {
+      this.availableProducts = res;
+      this.cdr.markForCheck();
+    });
+
+    this.receivingService.getReceivingStatuses().subscribe(res => {
+      this.statusOptions = ['All', ...res];
+      // Also update the table filter options dynamically
+      this.tableConfig = {
+        ...this.tableConfig,
+        filterOptions: this.statusOptions.map(s => ({ label: s, value: s }))
+      };
+      this.cdr.markForCheck();
+    });
+
+    this.receivingService.getQcStatuses().subscribe(res => {
+      this.qcStatusOptions = res;
       this.cdr.markForCheck();
     });
 
@@ -226,7 +242,7 @@ export class DcReceivingPageComponent implements OnInit {
     itemsArray.clear();
     if (shipment) {
       shipment.products.forEach(p => {
-        itemsArray.push(this.createProductRow(p.productName, p.orderedQty, p.orderedQty, 0, 'Pending'));
+        itemsArray.push(this.createProductRow(p.productId, p.orderedQty, p.orderedQty, 0, 'Pending'));
       });
     }
     this.cdr.markForCheck();
@@ -258,7 +274,7 @@ export class DcReceivingPageComponent implements OnInit {
     record.items.forEach(item => {
       itemsArray.push(
         this.createProductRow(
-          item.productName,
+          item.productId,
           item.orderedQty,
           item.receivedQty,
           item.damagedQty,
@@ -293,7 +309,7 @@ export class DcReceivingPageComponent implements OnInit {
     record.items.forEach(item => {
       itemsArray.push(
         this.createProductRow(
-          item.productName,
+          item.productId,
           item.orderedQty,
           item.receivedQty,
           item.damagedQty,
@@ -314,7 +330,7 @@ export class DcReceivingPageComponent implements OnInit {
   }
 
   addProductRow(): void {
-    this.itemsFormArray.push(this.createProductRow('', 0, 0, 0, 'Pending'));
+    this.itemsFormArray.push(this.createProductRow('', 0, 0, 0, 'Pending', true));
     this.cdr.markForCheck();
   }
 
