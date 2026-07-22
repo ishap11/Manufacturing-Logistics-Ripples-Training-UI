@@ -9,14 +9,16 @@ export type { Supplier, SupplierCategory, SupplierCountry, RateCard };
   providedIn: 'root'
 })
 export class SupplierService {
+  private readonly storageKey = 'supplierDetails';
 
-  private suppliers: Supplier[] = [
-    { id: 1, supplierName: 'ABC Industries', code: 'SUP-ABC-01', email: 'orders@abcind.com', phone: '+1-555-0199', category: 'Raw Materials', city: 'Chicago', country: 'United States', status: 'Active', reliabilityScore: 94 },
-    { id: 2, supplierName: 'XYZ Electronics Pvt Ltd', code: 'SUP-XYZ-02', email: 'sales@xyzelect.com', phone: '+91-22-555021', category: 'Components', city: 'Mumbai', country: 'India', status: 'Active', reliabilityScore: 91 },
-    { id: 3, supplierName: 'Global Packaging Co.', code: 'SUP-GPC-03', email: 'support@globalpack.co.uk', phone: '+44-20-7946', category: 'Packaging', city: 'London', country: 'United Kingdom', status: 'Active', reliabilityScore: 98 },
-    { id: 4, supplierName: 'Pacific Chemical Corp', code: 'SUP-PAC-04', email: 'info@pacificchem.jp', phone: '+81-3-555-014', category: 'Chemicals', city: 'Tokyo', country: 'Japan', status: 'Inactive', reliabilityScore: 82 },
-    { id: 5, supplierName: 'Apex Logistics Supply', code: 'SUP-APX-05', email: 'procurement@apexlog.de', phone: '+49-69-55512', category: 'Logistics Equipment', city: 'Frankfurt', country: 'Germany', status: 'Active', reliabilityScore: 95 }
+  private readonly defaultSuppliers: Supplier[] = [
+    { id: 1, companyName: 'Madurai Textiles', supplierName: 'Karthik Subramanian', age: 41, code: 'SUP-MDU-01', email: 'orders@maduraitextiles.in', phone: '+91-98410-11223', address: '12 West Masi Street, Madurai', category: 'Textiles', city: 'Madurai', country: 'India', status: 'Active', reliabilityScore: 94 },
+    { id: 2, companyName: 'Coimbatore Machine Works', supplierName: 'Meenakshi Raman', age: 38, code: 'SUP-CBE-02', email: 'sales@cbemachineworks.in', phone: '+91-98765-44321', address: '45 Avinashi Road, Coimbatore', category: 'Components', city: 'Coimbatore', country: 'India', status: 'Active', reliabilityScore: 91 },
+    { id: 3, companyName: 'Kochi Packaging Hub', supplierName: 'Anish Varghese', age: 44, code: 'SUP-COK-03', email: 'support@kochipackaging.in', phone: '+91-97470-55667', address: '8 Marine Drive, Kochi', category: 'Packaging', city: 'Kochi', country: 'India', status: 'Active', reliabilityScore: 96 },
+    { id: 4, companyName: 'Bengaluru Industrial Supplies', supplierName: 'Lakshmi Narayan', age: 35, code: 'SUP-BLR-04', email: 'info@blrindustrial.in', phone: '+91-99800-77889', address: '27 Peenya Industrial Area, Bengaluru', category: 'Raw Materials', city: 'Bengaluru', country: 'India', status: 'Active', reliabilityScore: 89 }
   ];
+
+  private suppliers: Supplier[] = this.loadSuppliers();
 
   private categories: SupplierCategory[] = [
     { id: 1, name: 'Raw Materials', code: 'CAT-RAW', supplierCount: 8, description: 'Basic raw materials and commodities for manufacturing' },
@@ -43,6 +45,7 @@ export class SupplierService {
   ];
 
   getSuppliers(): Observable<Supplier[]> {
+    this.saveSuppliers();
     return of([...this.suppliers]).pipe(delay(400));
   }
 
@@ -57,6 +60,7 @@ export class SupplierService {
       id: this.suppliers.length > 0 ? Math.max(...this.suppliers.map(s => s.id)) + 1 : 1
     };
     this.suppliers.push(newSupplier);
+    this.saveSuppliers();
     return of(newSupplier).pipe(delay(400));
   }
 
@@ -69,6 +73,7 @@ export class SupplierService {
         ...this.suppliers[idx],
         ...supplier
       };
+      this.saveSuppliers();
       return of(this.suppliers[idx]).pipe(delay(400));
     } else {
       const idx = this.suppliers.findIndex(s => s.id === idOrSupplier);
@@ -77,6 +82,7 @@ export class SupplierService {
         ...this.suppliers[idx],
         ...updatedData
       };
+      this.saveSuppliers();
       return of(this.suppliers[idx]).pipe(delay(400));
     }
   }
@@ -86,7 +92,14 @@ export class SupplierService {
     if (idx === -1) return of(false);
     
     this.suppliers.splice(idx, 1);
+    this.saveSuppliers();
     return of(true).pipe(delay(400));
+  }
+
+  getSuppliersByCity(city: string): Observable<Supplier[]> {
+    const normalizedCity = city.trim().toLowerCase();
+    const suppliers = this.suppliers.filter(s => s.city.toLowerCase() === normalizedCity);
+    return of(suppliers).pipe(delay(300));
   }
 
   getCategories(): Observable<SupplierCategory[]> {
@@ -99,5 +112,30 @@ export class SupplierService {
 
   getRateCards(): Observable<RateCard[]> {
     return of(this.rateCards).pipe(delay(350));
+  }
+
+  private loadSuppliers(): Supplier[] {
+    if (typeof window === 'undefined' || !window.localStorage) {
+      return [...this.defaultSuppliers];
+    }
+
+    const storedSuppliers = localStorage.getItem(this.storageKey);
+    if (!storedSuppliers) {
+      localStorage.setItem(this.storageKey, JSON.stringify(this.defaultSuppliers));
+      return [...this.defaultSuppliers];
+    }
+
+    try {
+      return JSON.parse(storedSuppliers) as Supplier[];
+    } catch {
+      localStorage.setItem(this.storageKey, JSON.stringify(this.defaultSuppliers));
+      return [...this.defaultSuppliers];
+    }
+  }
+
+  private saveSuppliers(): void {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem(this.storageKey, JSON.stringify(this.suppliers));
+    }
   }
 }

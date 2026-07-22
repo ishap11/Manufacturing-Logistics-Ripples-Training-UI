@@ -1,0 +1,49 @@
+<div class="card">
+
+    <h2>All Purchase Orders</h2>
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>Purchase Order ID</th>
+
+                <th>Supplier ID</th>
+
+                <th>Status ID</th>
+
+                <th>Currency ID</th>
+
+                <th>Purchase Order Date</th>
+
+                <th>Expected Delivery Date</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            <tr *ngFor="let purchaseOrder of purchaseOrders">
+
+                <td>{{purchaseOrder.purchaseOrderIdPk}}</td>
+
+                <td>{{purchaseOrder.supplierIdFk}}</td>
+
+                <td>{{purchaseOrder.purchaseOrderStatusIdFk}}</td>
+
+                <td>{{purchaseOrder.currencyIdFk}}</td>
+
+                <td>{{purchaseOrder.purchaseOrderDate}}</td>
+
+                <td>{{purchaseOrder.expectedDeliveryDate}}</td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</div>

@@ -1,0 +1,417 @@
+<div class="card">
+
+    <h2>Add Purchase Order with Items</h2>
+
+    <form
+        #poForm="ngForm"
+        (ngSubmit)="savePurchaseOrder(poForm)">
+
+        <!-- ================= PURCHASE ORDER DETAILS ================= -->
+
+        <h3>Purchase Order Details</h3>
+
+        <div class="form-grid">
+
+            <!-- Purchase Order ID -->
+
+            <div class="form-group">
+
+                <label>Purchase Order ID </label>
+
+                <input
+                    type="number"
+                    name="purchaseOrderIdPk"
+                    [(ngModel)]="purchaseOrder.purchaseOrderIdPk"
+                    #poIdCtrl="ngModel"
+                    required
+                    min="1">
+
+                <small
+    class="error"
+    *ngIf="poIdCtrl.errors?.['required'] &&
+           (poIdCtrl.touched || poForm.submitted)">
+
+    Purchase Order ID is required
+
+</small>
+
+<small
+    class="error"
+    *ngIf="poIdCtrl.errors?.['min'] &&
+           (poIdCtrl.touched || poForm.submitted)">
+
+    Purchase Order ID must be greater than 0
+
+</small>
+
+            </div>
+
+            <!-- Supplier ID -->
+
+            <div class="form-group">
+
+                <label>Supplier ID </label>
+
+                <input
+                    type="number"
+                    name="supplierIdFk"
+                    [(ngModel)]="purchaseOrder.supplierIdFk"
+                    #supplierCtrl="ngModel"
+                    required
+                    min="1">
+
+                <small
+    class="error"
+    *ngIf="supplierCtrl.errors?.['required'] &&
+           (supplierCtrl.touched || poForm.submitted)">
+
+    Supplier ID is required
+
+</small>
+
+<small
+    class="error"
+    *ngIf="supplierCtrl.errors?.['min'] &&
+           (supplierCtrl.touched || poForm.submitted)">
+
+    Supplier ID must be greater than 0
+
+</small>
+
+            </div>
+
+            <!-- Status -->
+
+            <div class="form-group">
+
+                <label>Purchase Order Status ID </label>
+
+                <input
+                    type="number"
+                    name="purchaseOrderStatusIdFk"
+                    [(ngModel)]="purchaseOrder.purchaseOrderStatusIdFk"
+                    #statusCtrl="ngModel"
+                    required
+                    min="1">
+
+                <small
+    class="error"
+    *ngIf="statusCtrl.errors?.['required'] &&
+           (statusCtrl.touched || poForm.submitted)">
+
+    Purchase Order Status ID is required
+
+</small>
+
+<small
+    class="error"
+    *ngIf="statusCtrl.errors?.['min'] &&
+           (statusCtrl.touched || poForm.submitted)">
+
+    Purchase Order Status ID must be greater than 0
+
+</small>
+
+            </div>
+
+            <!-- Currency -->
+
+            <div class="form-group">
+
+                <label>Currency ID </label>
+
+                <input
+                    type="number"
+                    name="currencyIdFk"
+                    [(ngModel)]="purchaseOrder.currencyIdFk"
+                    #currencyCtrl="ngModel"
+                    required
+                    min="1">
+
+                <small
+    class="error"
+    *ngIf="currencyCtrl.errors?.['required'] &&
+           (currencyCtrl.touched || poForm.submitted)">
+
+    Currency ID is required
+
+</small>
+
+<small
+    class="error"
+    *ngIf="currencyCtrl.errors?.['min'] &&
+           (currencyCtrl.touched || poForm.submitted)">
+
+    Currency ID must be greater than 0
+
+</small>
+
+            </div>
+
+            <!-- Purchase Order Date -->
+
+            <div class="form-group">
+
+                <label>Purchase Order Date </label>
+
+                <input
+                    type="date"
+                    name="purchaseOrderDate"
+                    [(ngModel)]="purchaseOrder.purchaseOrderDate"
+                    [min]="today"
+                    [max]="today"
+                    #dateCtrl="ngModel"
+                    required>
+
+                <small
+                    class="error"
+                    *ngIf="dateCtrl.invalid && (dateCtrl.touched || poForm.submitted)">
+
+                    Purchase Order Date is required
+
+                </small>
+
+            </div>
+
+            <!-- Expected Delivery Date -->
+
+            <div class="form-group">
+
+                <label>Expected Delivery Date </label>
+
+                <input
+                    type="date"
+                    name="expectedDeliveryDate"
+                    [(ngModel)]="purchaseOrder.expectedDeliveryDate"
+                    [min]="tomorrow"
+                    #expectedCtrl="ngModel"
+                    required>
+
+                <small
+                    class="error"
+                    *ngIf="expectedCtrl.invalid && (expectedCtrl.touched || poForm.submitted)">
+
+                    Expected Delivery Date is required
+
+                </small>
+
+            </div>
+
+        </div>
+
+        <hr>
+
+        <!-- ================= ITEMS ================= -->
+
+        <h3>Purchase Order Items</h3>
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Purchase Order Item ID</th>
+
+                    <th>Product Supplier ID</th>
+
+                    <th>Quantity</th>
+
+                    <th>Unit Price</th>
+
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr
+                    *ngFor="let item of purchaseOrder.itemList; let i = index">
+
+                    <!-- Item ID -->
+
+                    <td>
+
+                        <input
+                            type="number"
+                            [(ngModel)]="item.purchaseOrderItemIdPk"
+                            name="purchaseOrderItemIdPk{{i}}"
+                            #itemIdCtrl="ngModel"
+        required
+        min="1">
+
+    <small
+    class="error"
+    *ngIf="itemIdCtrl.errors?.['required'] &&
+           (itemIdCtrl.touched || poForm.submitted)">
+
+    Purchase Order Item ID is required
+
+</small>
+
+<small
+    class="error"
+    *ngIf="itemIdCtrl.errors?.['min'] &&
+           (itemIdCtrl.touched || poForm.submitted)">
+
+    Purchase Order Item ID must be greater than 0
+
+</small>
+
+                    </td>
+
+                    <!-- Product Supplier -->
+
+                    <td>
+
+                        <input
+                            type="number"
+                            [(ngModel)]="item.productSupplierIdFk"
+                            name="productSupplierIdFk{{i}}"
+                            #productSupplierCtrl="ngModel"
+        required
+        min="1">
+
+    <small
+    class="error"
+    *ngIf="productSupplierCtrl.errors?.['required'] &&
+           (productSupplierCtrl.touched || poForm.submitted)">
+
+    Product Supplier ID is required
+
+</small>
+
+<small
+    class="error"
+    *ngIf="productSupplierCtrl.errors?.['min'] &&
+           (productSupplierCtrl.touched || poForm.submitted)">
+
+    Product Supplier ID must be greater than 0
+
+</small>
+
+                    </td>
+
+                    <!-- Quantity -->
+
+                    <td>
+
+                        <input
+                            type="number"
+                            [(ngModel)]="item.purchasedQuantity"
+                            name="purchasedQuantity{{i}}"
+                            #quantityCtrl="ngModel"
+        required
+        min="1">
+
+    <small
+    class="error"
+    *ngIf="quantityCtrl.errors?.['required'] &&
+           (quantityCtrl.touched || poForm.submitted)">
+
+    Purchase Quantity is required
+
+</small>
+
+<small
+    class="error"
+    *ngIf="quantityCtrl.errors?.['min'] &&
+           (quantityCtrl.touched || poForm.submitted)">
+
+    Purchase Quantity must be greater than 0
+
+</small>
+
+                    </td>
+
+                    <!-- Unit Price -->
+
+                    <td>
+
+                        <input
+                            type="number"
+                            step="0.01"
+                            [(ngModel)]="item.unitPrice"
+                            name="unitPrice{{i}}"
+                            #unitPriceCtrl="ngModel"
+        required
+        min="1">
+
+    <small
+    class="error"
+    *ngIf="unitPriceCtrl.errors?.['required'] &&
+           (unitPriceCtrl.touched || poForm.submitted)">
+
+    Unit Price is required
+
+</small>
+
+<small
+    class="error"
+    *ngIf="unitPriceCtrl.errors?.['min'] &&
+           (unitPriceCtrl.touched || poForm.submitted)">
+
+    Unit Price must be greater than 0
+
+</small>
+
+                    </td>
+
+                    <!-- Remove -->
+
+                    <td>
+
+                        <button
+                            type="button"
+                            class="remove-btn"
+                            (click)="removeItem(i)">
+
+                            Remove
+
+                        </button>
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+        <br>
+
+        <button
+            type="button"
+            class="add-btn"
+            (click)="addItem()">
+
+            + Add Item
+
+        </button>
+
+        <hr>
+
+        <div class="button-container">
+
+            <button
+                type="button"
+                (click)="resetForm(poForm)">
+
+                Reset
+
+            </button>
+
+            <button
+                type="submit">
+
+                Save Purchase Order
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>

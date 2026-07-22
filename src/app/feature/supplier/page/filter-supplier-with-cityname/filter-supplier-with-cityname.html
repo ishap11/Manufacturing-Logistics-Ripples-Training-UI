@@ -1,0 +1,92 @@
+<section class="supplier-page">
+  <div class="page-heading">
+    <h1>Filter Supplier by City</h1>
+    <p>Enter a city name to fetch matching suppliers.</p>
+  </div>
+
+  <form class="search-form" (ngSubmit)="filterByCity()">
+    <label>
+      City Name
+      <input type="text" name="cityName" [(ngModel)]="cityName" placeholder="Enter City Name" required />
+    </label>
+    <button type="submit">Fetch Supplier</button>
+  </form>
+
+  @if (searched && suppliers.length === 0) {
+    <p class="message">No suppliers found for {{ cityName }}.</p>
+  }
+
+  <!-- <div class="supplier-grid">
+    @for (supplier of suppliers; track supplier.id) {
+      <article class="supplier-card">
+        <div class="card-header">
+          <span>Supplier ID: {{ supplier.id }}</span>
+          <strong>{{ supplier.companyName }}</strong>
+        </div>
+
+        <dl>
+          <div>
+            <dt>Supplier Name</dt>
+            <dd>{{ supplier.supplierName }}</dd>
+          </div>
+          <div>
+            <dt>Age</dt>
+            <dd>{{ supplier.age }}</dd>
+          </div>
+          <div>
+            <dt>Phone</dt>
+            <dd>{{ supplier.phone }}</dd>
+          </div>
+          <div>
+            <dt>City</dt>
+            <dd>{{ supplier.city }}</dd>
+          </div>
+          <div class="full-width">
+            <dt>Address</dt>
+            <dd>{{ supplier.address }}</dd>
+          </div>
+        </dl>
+      </article>
+    }
+  </div> -->
+
+  @if (searched && suppliers.length > 0) {
+    <div class="supplier-grid">
+      @for (supplier of suppliers; track supplier.id) {
+        <article class="supplier-card">
+          <div class="card-header">
+            <span>Supplier ID: {{ supplier.id }}</span>
+            <strong>{{ supplier.companyName }}</strong>
+          </div>
+
+          <dl>
+            <div>
+              <dt>Supplier Name</dt>
+              <dd>{{ supplier.supplierName }}</dd>
+            </div>
+
+            <div>
+              <dt>Age</dt>
+              <dd>{{ supplier.age }}</dd>
+            </div>
+
+            <div>
+              <dt>Phone</dt>
+              <dd>{{ supplier.phone }}</dd>
+            </div>
+
+            <div>
+              <dt>City</dt>
+              <dd>{{ supplier.city }}</dd>
+            </div>
+
+            <div class="full-width">
+              <dt>Address</dt>
+              <dd>{{ supplier.address }}</dd>
+            </div>
+          </dl>
+        </article>
+      }
+    </div>
+  }
+</section>

@@ -1,4 +1,74 @@
 <div style="padding: 24px;">
   <h2>{{ title }}</h2>
   <p>{{ description }}</p>
+
+  <!-- Horizontal Tabs -->
+  <div class="tabs">
+
+    <div
+      class="tab"
+      [class.active]="selectedTab === 'add'"
+      (click)="selectedTab='add'">
+
+      Create Purchase Order
+    </div>
+
+    <div
+      class="tab"
+      [class.active]="selectedTab === 'findById'"
+      (click)="selectedTab='findById'">
+
+      Fetch Purchase Order By ID
+    </div>
+
+    <div
+      class="tab"
+      [class.active]="selectedTab === 'findAll'"
+      (click)="selectedTab='findAll'">
+
+      Fetch All Purchase Orders
+    </div>
+
+    <div
+      class="tab"
+      [class.active]="selectedTab === 'lazy'"
+      (click)="selectedTab='lazy'">
+
+      Fetch Purchase Orders Using Lazy Loading
+    </div>
+
+    <div
+      class="tab"
+      [class.active]="selectedTab === 'addItems'"
+      (click)="selectedTab='addItems'">
+
+      Create Purchse Order With Items
+    </div>
+
+  </div>
+
+  <!-- Content Area -->
+  <div class="content">
+
+    <app-add-purchase-order
+      *ngIf="selectedTab==='add'">
+    </app-add-purchase-order>
+
+    <app-find-purchase-order-by-id
+      *ngIf="selectedTab==='findById'">
+    </app-find-purchase-order-by-id>
+
+    <app-find-all-purchase-orders
+      *ngIf="selectedTab==='findAll'">
+    </app-find-all-purchase-orders>
+
+    <app-fetch-using-lazy-loading
+      *ngIf="selectedTab==='lazy'">
+    </app-fetch-using-lazy-loading>
+
+    <app-add-purchase-order-with-items
+      *ngIf="selectedTab==='addItems'">
+    </app-add-purchase-order-with-items>
+
+  </div>
 </div>

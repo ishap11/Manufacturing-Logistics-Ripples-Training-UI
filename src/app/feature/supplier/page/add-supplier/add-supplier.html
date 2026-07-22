@@ -1,0 +1,44 @@
+<section class="supplier-page">
+  <div class="page-heading">
+    <h1>Add Supplier</h1>
+    <p>Capture supplier contact and company details.</p>
+  </div>
+
+  <form class="supplier-form" #supplierForm="ngForm" (ngSubmit)="addSupplier(supplierForm)">
+    <label>
+      Company Name
+      <input type="text" name="companyName" [(ngModel)]="supplier.companyName" required />
+    </label>
+
+    <label>
+      Supplier Name
+      <input type="text" name="supplierName" [(ngModel)]="supplier.supplierName" required />
+    </label>
+
+    <label>
+      Age
+      <input type="number" name="age" [(ngModel)]="supplier.age" min="18" required />
+    </label>
+
+    <label>
+      Phone
+      <input type="tel" name="phone" [(ngModel)]="supplier.phone" required />
+    </label>
+
+    <label>
+      City
+      <input type="text" name="city" [(ngModel)]="supplier.city" required />
+    </label>
+
+    <label class="full-width">
+      Address
+      <textarea name="address" rows="4" [(ngModel)]="supplier.address" required></textarea>
+    </label>
+
+    <button type="submit">Add Supplier</button>
+  </form>
+
+  @if (message) {
+    <p class="message">{{ message }}</p>
+  }
+</section>

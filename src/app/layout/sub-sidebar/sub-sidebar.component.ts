@@ -22,12 +22,12 @@ export class SubSidebarComponent implements OnChanges {
     supplier: {
       title: 'Supplier Portal',
       links: [
-        { label: 'Dashboard', route: '/supplier/dashboard', icon: 'fa-chart-pie' },
+        //{ label: 'Dashboard', route: '/supplier/dashboard', icon: 'fa-chart-pie' },
         { label: 'Supplier List', route: '/supplier/list', icon: 'fa-address-book' },
         { label: 'Add Supplier', route: '/supplier/add', icon: 'fa-user-plus' },
-        { label: 'Categories', route: '/supplier/categories', icon: 'fa-tags' },
-        { label: 'Countries', route: '/supplier/countries', icon: 'fa-globe' },
-        { label: 'Rate Cards', route: '/supplier/rate-cards', icon: 'fa-dollar-sign' }
+        { label: 'Update Supplier', route: '/supplier/update', icon: 'fa-edit' },
+        { label: 'Find Supplier', route: '/supplier/find/1', icon: 'fa-magnifying-glass' },
+        { label: 'Filter by City', route: '/supplier/filter-by-city', icon: 'fa-city' }
       ]
     },
     inventory: {

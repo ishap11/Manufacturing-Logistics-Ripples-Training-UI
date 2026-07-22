@@ -1,0 +1,63 @@
+<div class="table-card">
+
+    <h3>Dispatch Records</h3>
+    @if(dispatches.length > 0){
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>Dispatch ID</th>
+                <th>DC ID</th>
+                <th>Store ID</th>
+                <th>Dispatch Date</th>
+                <th>Status ID</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            @for(dispatch of dispatches; track dispatch.dispatchIdPk){
+
+                <tr>
+
+                    <td>{{dispatch.dispatchIdPk}}</td>
+
+                    <td>{{dispatch.dcIdFk}}</td>
+
+                    <td>{{dispatch.storeIdFk}}</td>
+
+                    <td>{{dispatch.dispatchDate}}</td>
+
+                    <td>{{dispatch.dispatchStatusIdFk}}</td>
+
+                </tr>
+
+            }
+
+        </tbody>
+
+    </table>
+}
+
+ @if(noRecords){
+
+    <div class="warning-message">
+        No dispatch records found.
+    </div>
+
+    }
+
+    @if(errorMessage){
+
+    <div class="error-message">
+        {{ errorMessage }}
+    </div>
+
+    }
+
+
+</div>
