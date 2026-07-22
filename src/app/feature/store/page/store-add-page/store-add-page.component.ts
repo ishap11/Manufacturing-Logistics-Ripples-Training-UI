@@ -1,36 +1,92 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { PageHeaderComponent } from '../../../../common/component/page-header/page-header.component';
-import { StatusBadgeComponent } from '../../../../common/component/status-badge/status-badge.component';
-import { CreateStoreProfile, StoreProfile, StoreService } from '../../../../service/store/store.service';
+import { CreateStoreProfile, ManagerOption, AddressOption, UserOption, StoreService } from '../../../../service/store/store.service';
 
 @Component({
   selector: 'mlp-store-add-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, PageHeaderComponent, StatusBadgeComponent],
+  imports: [CommonModule, ReactiveFormsModule, PageHeaderComponent],
   templateUrl: './store-add-page.component.html',
   styleUrl: './store-add-page.component.scss'
 })
-export class StoreAddPageComponent {
+export class StoreAddPageComponent implements OnInit {
   saving = false;
-  createdStore: StoreProfile | null = null;
+  successMessage: string | null = null;
+  errorMessage: string | null = null;
 
-  private formBuilder = inject(FormBuilder);
-  private storeService = inject(StoreService);
+  managers: ManagerOption[] = [];
+  addresses: AddressOption[] = [];
+  users: UserOption[] = [];
 
-  storeForm = this.formBuilder.group({
-    Store_Code: ['', [Validators.required, Validators.maxLength(20)]],
-    Store_Name: ['', [Validators.required, Validators.maxLength(100)]],
-    Store_Manager_Id_Fk: [null as number | null],
-    Address_Id_FK: [null as number | null],
-    Store_Status_Id_FK: [1, Validators.required],
-    city: ['', Validators.required],
-    region: ['', Validators.required],
-    status: ['Active' as StoreProfile['status'], Validators.required],
-    managerName: ['', Validators.required]
-  });
+  loadingManagers = false;
+  loadingAddresses = false;
+  loadingUsers = false;
+
+  storeForm: FormGroup;
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private storeService: StoreService
+  ) {
+    this.storeForm = this.formBuilder.group({
+      StoreName: ['', [Validators.required, Validators.maxLength(100)]],
+      ManagersIdFk: [null as number | null, Validators.required],
+      AddressIdFk: [null as number | null, Validators.required],
+      StoreStatusIdFk: [null as number | null],
+      CreatedByUserIdFk: [null as number | null, Validators.required]
+    });
+  }
+
+  ngOnInit(): void {
+    this.loadManagers();
+    this.loadAddresses();
+    this.loadUsers();
+  }
+
+  loadManagers(): void {
+    this.loadingManagers = true;
+    this.storeService.getManagers().subscribe({
+      next: (managers) => {
+        this.managers = managers;
+        this.loadingManagers = false;
+      },
+      error: () => {
+        this.errorMessage = 'Failed to load managers list.';
+        this.loadingManagers = false;
+      }
+    });
+  }
+
+  loadAddresses(): void {
+    this.loadingAddresses = true;
+    this.storeService.getAddresses().subscribe({
+      next: (addresses) => {
+        this.addresses = addresses;
+        this.loadingAddresses = false;
+      },
+      error: () => {
+        this.errorMessage = 'Failed to load addresses list.';
+        this.loadingAddresses = false;
+      }
+    });
+  }
+
+  loadUsers(): void {
+    this.loadingUsers = true;
+    this.storeService.getUsers().subscribe({
+      next: (users) => {
+        this.users = users;
+        this.loadingUsers = false;
+      },
+      error: () => {
+        this.errorMessage = 'Failed to load users list.';
+        this.loadingUsers = false;
+      }
+    });
+  }
 
   addStore(): void {
     if (this.storeForm.invalid) {
@@ -38,32 +94,28 @@ export class StoreAddPageComponent {
       return;
     }
 
-    const now = this.storeService.getCurrentDateTime();
     const payload: CreateStoreProfile = {
-      Store_Code: this.storeForm.controls.Store_Code.value?.trim() ?? '',
-      Store_Name: this.storeForm.controls.Store_Name.value?.trim() ?? '',
-      Store_Manager_Id_Fk: this.storeForm.controls.Store_Manager_Id_Fk.value,
-      Address_Id_FK: this.storeForm.controls.Address_Id_FK.value,
-      Store_Status_Id_FK: this.storeForm.controls.Store_Status_Id_FK.value,
-      Created_DateTime: now,
-      Updated_DateTime: now,
-      city: this.storeForm.controls.city.value?.trim() ?? '',
-      region: this.storeForm.controls.region.value?.trim() ?? '',
-      status: this.storeForm.controls.status.value ?? 'Active',
-      managerName: this.storeForm.controls.managerName.value?.trim() ?? ''
+      StoreName: this.storeForm.controls['StoreName'].value?.trim() ?? '',
+      ManagersIdFk: this.storeForm.controls['ManagersIdFk'].value,
+      AddressIdFk: this.storeForm.controls['AddressIdFk'].value,
+      StoreStatusIdFk: this.storeForm.controls['StoreStatusIdFk'].value,
+      CreatedByUserIdFk: this.storeForm.controls['CreatedByUserIdFk'].value
     };
 
     this.saving = true;
+    this.successMessage = null;
+    this.errorMessage = null;
+
     this.storeService.addStore(payload).subscribe({
-      next: (store) => {
-        this.createdStore = store;
-        this.storeForm.reset({ Store_Status_Id_FK: 1, status: 'Active' });
+      next: (res) => {
+        this.successMessage = res?.message ?? 'Store Added Successfully';
+        this.storeForm.reset();
         this.saving = false;
       },
-      error: () => {
+      error: (err) => {
+        this.errorMessage = err?.error?.error ?? err?.error?.message ?? 'Failed to add store.';
         this.saving = false;
       }
     });
   }
-
 }

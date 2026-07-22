@@ -5,20 +5,12 @@ import { EmptyStateComponent } from '../../../../common/component/empty-state/em
 import { LoaderComponent } from '../../../../common/component/loader/loader.component';
 import { PageHeaderComponent } from '../../../../common/component/page-header/page-header.component';
 import { SearchBoxComponent } from '../../../../common/component/search-box/search-box.component';
-import { StatusBadgeComponent } from '../../../../common/component/status-badge/status-badge.component';
 import { StoreProfile, StoreService } from '../../../../service/store/store.service';
 
 @Component({
   selector: 'mlp-store-findall-page',
   standalone: true,
-  imports: [
-    CommonModule,
-    PageHeaderComponent,
-    SearchBoxComponent,
-    StatusBadgeComponent,
-    LoaderComponent,
-    EmptyStateComponent
-  ],
+  imports: [CommonModule, PageHeaderComponent, SearchBoxComponent, LoaderComponent, EmptyStateComponent],
   templateUrl: './store-findall-page.component.html',
   styleUrl: './store-findall-page.component.scss'
 })
@@ -28,7 +20,10 @@ export class StoreFindallPageComponent implements OnInit {
   filteredStores: StoreProfile[] = [];
   searchQuery = '';
 
-  private storeService = inject(StoreService);
+  
+  constructor(
+  private storeService: StoreService
+) {}
 
   ngOnInit(): void {
     this.loadStores();
@@ -57,11 +52,8 @@ export class StoreFindallPageComponent implements OnInit {
     const query = this.searchQuery.toLowerCase();
     this.filteredStores = this.stores.filter(store =>
       !query ||
-      store.Store_Code.toLowerCase().includes(query) ||
-      store.Store_Name.toLowerCase().includes(query) ||
-      store.city.toLowerCase().includes(query) ||
-      store.region.toLowerCase().includes(query)
+      store.storeCode.toLowerCase().includes(query) ||
+      store.storeName.toLowerCase().includes(query)
     );
   }
-
 }

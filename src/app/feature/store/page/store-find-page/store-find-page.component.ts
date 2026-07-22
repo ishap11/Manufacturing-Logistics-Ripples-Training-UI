@@ -5,20 +5,12 @@ import { EmptyStateComponent } from '../../../../common/component/empty-state/em
 import { LoaderComponent } from '../../../../common/component/loader/loader.component';
 import { PageHeaderComponent } from '../../../../common/component/page-header/page-header.component';
 import { SearchBoxComponent } from '../../../../common/component/search-box/search-box.component';
-import { StatusBadgeComponent } from '../../../../common/component/status-badge/status-badge.component';
 import { StoreProfile, StoreService } from '../../../../service/store/store.service';
 
 @Component({
   selector: 'mlp-store-find-page',
   standalone: true,
-  imports: [
-    CommonModule,
-    PageHeaderComponent,
-    SearchBoxComponent,
-    StatusBadgeComponent,
-    LoaderComponent,
-    EmptyStateComponent
-  ],
+  imports: [CommonModule, PageHeaderComponent, SearchBoxComponent, LoaderComponent, EmptyStateComponent],
   templateUrl: './store-find-page.component.html',
   styleUrl: './store-find-page.component.scss'
 })
@@ -27,7 +19,10 @@ export class StoreFindPageComponent {
   searched = false;
   store: StoreProfile | undefined;
 
-  private storeService = inject(StoreService);
+  
+  constructor(
+  private storeService: StoreService
+) {}
 
   findStore(query: string): void {
     const trimmed = query.trim();
@@ -37,17 +32,23 @@ export class StoreFindPageComponent {
       return;
     }
 
+    const id = Number(trimmed);
+    if (isNaN(id)) {
+      alert('Please enter a valid numeric Store ID.');
+      return;
+    }
+
     this.loading = true;
     this.searched = true;
-    this.storeService.findStore(trimmed).subscribe({
+    this.storeService.findStore(id).subscribe({
       next: (res) => {
         this.store = res;
         this.loading = false;
       },
       error: () => {
+        this.store = undefined;
         this.loading = false;
       }
     });
   }
-
 }

@@ -1,29 +1,19 @@
 <div class="store-page-container">
   <app-page-header
     title="Filter Stores"
-    description="Filter store profiles by operational status and region."
+    description="Filter store profiles by store name."
   ></app-page-header>
 
   <div class="card p-3 mb-4">
     <div class="filter-row">
       <label>
-        <span>Status</span>
-        <select [(ngModel)]="statusFilter" (change)="applyFilters()">
-          <option value="">All Statuses</option>
-          <option value="Active">Active</option>
-          <option value="Inactive">Inactive</option>
-          <option value="Pending">Pending</option>
-        </select>
-      </label>
-
-      <label>
-        <span>Region</span>
-        <select [(ngModel)]="regionFilter" (change)="applyFilters()">
-          <option value="">All Regions</option>
-          <option value="South">South</option>
-          <option value="Midwest">Midwest</option>
-          <option value="West">West</option>
-        </select>
+        <span>Store Name</span>
+        <input
+          type="text"
+          [(ngModel)]="nameFilter"
+          (input)="applyFilters()"
+          placeholder="Search by store name..."
+        />
       </label>
     </div>
   </div>
@@ -32,40 +22,50 @@
     <app-loader text="Filtering stores..."></app-loader>
   }
 
-  @if (!loading) {
+  @if (!loading && errorMessage) {
+    <div class="card p-3">
+      <div class="text-bold text-danger">{{ errorMessage }}</div>
+    </div>
+  }
+
+  @if (!loading && !errorMessage) {
     <div class="card">
       @if (stores.length > 0) {
         <div class="table-responsive" style="border: none; margin: 0;">
           <table class="table table-striped">
             <thead>
               <tr>
+                <th>Store Id</th>
                 <th>Store Code</th>
                 <th>Store Name</th>
-                <th>City</th>
-                <th>Region</th>
-                <th class="text-center">Status</th>
+                <th>Manager Id</th>
+                <th>Address Id</th>
+                <th>Status Id</th>
+                <th>Created By</th>
+                <th>Updated By</th>
               </tr>
             </thead>
             <tbody>
-              @for (store of stores; track store.Store_Id_PK) {
+              @for (store of stores; track store.storeIdPk) {
                 <tr>
-                  <td class="text-bold text-muted">{{ store.Store_Code }}</td>
-                  <td class="text-bold text-primary">{{ store.Store_Name }}</td>
-                  <td>{{ store.city }}</td>
-                  <td>{{ store.region }}</td>
-                  <td class="text-center">
-                    <app-status-badge [status]="store.status"></app-status-badge>
-                  </td>
+                  <td class="text-bold">{{ store.storeIdPk }}</td>
+                  <td class="text-bold text-muted">{{ store.storeCode }}</td>
+                  <td class="text-bold text-primary">{{ store.storeName }}</td>
+                  <td>{{ store.managersIdFk }}</td>
+                  <td>{{ store.addressIdFk }}</td>
+                  <td>{{ store.storeStatusIdFk }}</td>
+                  <td>{{ store.createdByUserIdFk ?? 'N/A' }}</td>
+                  <td>{{ store.updatedByUserIdFk ?? 'N/A' }}</td>
                 </tr>
               }
             </tbody>
           </table>
         </div>
-      } @else {
+      } @else if (searched) {
         <app-empty-state
           icon="fa-filter"
           title="No Stores Matched"
-          description="No store profiles match the selected filter criteria."
+          description="No store profiles match the entered name."
         ></app-empty-state>
       }
     </div>

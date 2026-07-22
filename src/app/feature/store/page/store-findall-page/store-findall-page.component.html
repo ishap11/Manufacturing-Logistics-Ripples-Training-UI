@@ -1,12 +1,12 @@
 <div class="store-page-container">
   <app-page-header
     title="Find All Stores"
-    description="Browse registered stores, profile references, managers and operational statuses."
+    description="Browse all registered store profiles."
   ></app-page-header>
 
   <div class="card p-3 mb-4">
     <app-search-box
-      placeholder="Search stores by code, name, city or region..."
+      placeholder="Search stores by code or name..."
       (search)="onSearch($event)"
     ></app-search-box>
   </div>
@@ -25,26 +25,22 @@
                 <th>Store Id</th>
                 <th>Store Code</th>
                 <th>Store Name</th>
-                <th>Manager</th>
-                <th>City</th>
-                <th>Region</th>
-                <th>Updated</th>
-                <th class="text-center">Status</th>
+                <th>Manager Name</th>
+                <th>Manager Phone</th>
+                <th>Address Id</th>
+                <th>Status Id</th>
               </tr>
             </thead>
             <tbody>
-              @for (store of filteredStores; track store.Store_Id_PK) {
+              @for (store of filteredStores; track store.storeIdPk) {
                 <tr>
-                  <td class="text-bold">{{ store.Store_Id_PK }}</td>
-                  <td class="text-bold text-muted">{{ store.Store_Code }}</td>
-                  <td class="text-bold text-primary">{{ store.Store_Name }}</td>
-                  <td>{{ store.managerName }}</td>
-                  <td>{{ store.city }}</td>
-                  <td>{{ store.region }}</td>
-                  <td>{{ store.Updated_DateTime }}</td>
-                  <td class="text-center">
-                    <app-status-badge [status]="store.status"></app-status-badge>
-                  </td>
+                  <td class="text-bold">{{ store.storeIdPk }}</td>
+                  <td class="text-bold text-muted">{{ store.storeCode }}</td>
+                  <td class="text-bold text-primary">{{ store.storeName }}</td>
+                  <td>{{ store.managersName }}</td>
+                  <td>{{ store.managersContactPhone }}</td>
+                  <td>{{ store.addressIdFk }}</td>
+                  <td>{{ store.storeStatusIdFk }}</td>
                 </tr>
               }
             </tbody>

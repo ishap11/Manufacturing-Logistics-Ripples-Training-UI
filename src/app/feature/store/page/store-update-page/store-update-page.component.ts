@@ -1,13 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { EmptyStateComponent } from '../../../../common/component/empty-state/empty-state.component';
 import { LoaderComponent } from '../../../../common/component/loader/loader.component';
 import { PageHeaderComponent } from '../../../../common/component/page-header/page-header.component';
 import { SearchBoxComponent } from '../../../../common/component/search-box/search-box.component';
-import { StatusBadgeComponent } from '../../../../common/component/status-badge/status-badge.component';
-import { StoreProfile, StoreService } from '../../../../service/store/store.service';
+import { StoreProfile, UpdateStoreProfile, StoreService } from '../../../../service/store/store.service';
 
 @Component({
   selector: 'mlp-store-update-page',
@@ -17,7 +16,6 @@ import { StoreProfile, StoreService } from '../../../../service/store/store.serv
     ReactiveFormsModule,
     PageHeaderComponent,
     SearchBoxComponent,
-    StatusBadgeComponent,
     LoaderComponent,
     EmptyStateComponent
   ],
@@ -29,47 +27,53 @@ export class StoreUpdatePageComponent {
   saving = false;
   searched = false;
   selectedStore: StoreProfile | null = null;
-  updatedStore: StoreProfile | null = null;
+  successMessage: string | null = null;
+  errorMessage: string | null = null;
 
-  private formBuilder = inject(FormBuilder);
-  private storeService = inject(StoreService);
+  updateForm: FormGroup;
 
-  updateForm = this.formBuilder.group({
-    Store_Name: ['', [Validators.required, Validators.maxLength(100)]],
-    Store_Manager_Id_Fk: [null as number | null],
-    Address_Id_FK: [null as number | null],
-    Store_Status_Id_FK: [1, Validators.required],
-    city: ['', Validators.required],
-    region: ['', Validators.required],
-    status: ['Active' as StoreProfile['status'], Validators.required],
-    managerName: ['', Validators.required]
-  });
+  constructor(
+    private formBuilder: FormBuilder,
+    private storeService: StoreService
+  ) {
+    this.updateForm = this.formBuilder.group({
+      StoreName: ['', [Validators.required, Validators.maxLength(100)]],
+      ManagersIdFk: [null as number | null],
+      StoreStatusIdFk: [null as number | null],
+      UpdatedByUserIdFk: [null as number | null]
+    });
+  }
 
   findStore(query: string): void {
     const trimmed = query.trim();
     if (!trimmed) return;
 
+    const id = Number(trimmed);
+    if (isNaN(id)) {
+      alert('Please enter a valid numeric Store ID.');
+      return;
+    }
+
     this.loading = true;
     this.searched = true;
-    this.updatedStore = null;
-    this.storeService.findStore(trimmed).subscribe({
+    this.successMessage = null;
+    this.errorMessage = null;
+
+    this.storeService.findStore(id).subscribe({
       next: (store) => {
         this.selectedStore = store ?? null;
         if (store) {
           this.updateForm.patchValue({
-            Store_Name: store.Store_Name,
-            Store_Manager_Id_Fk: store.Store_Manager_Id_Fk,
-            Address_Id_FK: store.Address_Id_FK,
-            Store_Status_Id_FK: store.Store_Status_Id_FK,
-            city: store.city,
-            region: store.region,
-            status: store.status,
-            managerName: store.managerName
+            StoreName: store.storeName,
+            ManagersIdFk: store.managersIdFk,
+            StoreStatusIdFk: store.storeStatusIdFk,
+            UpdatedByUserIdFk: null
           });
         }
         this.loading = false;
       },
       error: () => {
+        this.selectedStore = null;
         this.loading = false;
       }
     });
@@ -81,26 +85,26 @@ export class StoreUpdatePageComponent {
       return;
     }
 
+    const payload: UpdateStoreProfile = {
+      StoreName: this.updateForm.controls['StoreName'].value?.trim() ?? '',
+      ManagersIdFk: this.updateForm.controls['ManagersIdFk'].value,
+      StoreStatusIdFk: this.updateForm.controls['StoreStatusIdFk'].value,
+      UpdatedByUserIdFk: this.updateForm.controls['UpdatedByUserIdFk'].value
+    };
+
     this.saving = true;
-    this.storeService.updateStore(this.selectedStore.Store_Id_PK, {
-      Store_Name: this.updateForm.controls.Store_Name.value?.trim() ?? '',
-      Store_Manager_Id_Fk: this.updateForm.controls.Store_Manager_Id_Fk.value,
-      Address_Id_FK: this.updateForm.controls.Address_Id_FK.value,
-      Store_Status_Id_FK: this.updateForm.controls.Store_Status_Id_FK.value,
-      city: this.updateForm.controls.city.value?.trim() ?? '',
-      region: this.updateForm.controls.region.value?.trim() ?? '',
-      status: this.updateForm.controls.status.value ?? 'Active',
-      managerName: this.updateForm.controls.managerName.value?.trim() ?? ''
-    }).subscribe({
-      next: (store) => {
-        this.updatedStore = store;
-        this.selectedStore = store;
+    this.successMessage = null;
+    this.errorMessage = null;
+
+    this.storeService.updateStore(this.selectedStore.storeIdPk, payload).subscribe({
+      next: (res) => {
+        this.successMessage = res?.message ?? 'Store Updated Successfully';
         this.saving = false;
       },
-      error: () => {
+      error: (err) => {
+        this.errorMessage = err?.error?.error ?? 'Failed to update store.';
         this.saving = false;
       }
     });
   }
-
 }
