@@ -1,7 +1,7 @@
 <section class="supplier-page">
   <div class="page-heading">
     <h1>Find Supplier by ID</h1>
-    <p>Search locally stored supplier details by supplier ID.</p>
+    <p>Search the live supplier database by supplier ID.</p>
   </div>
 
   <form class="search-form" (ngSubmit)="fetchSupplier()">
@@ -11,22 +11,20 @@
     </label>
     <button type="submit">Fetch Supplier</button>
   </form>
-
-  @if (searched && !supplier) {
-    <p class="message">No supplier found for ID {{ supplierId }}.</p>
-  }
+  @if (isLoading) { <p class="message">Loading supplier...</p> }
+  @if (errorMessage) { <p class="message">{{ errorMessage }}</p> }
 
   @if (supplier) {
     <article class="supplier-card">
       <div class="card-header">
-        <span>Supplier ID:  {{ supplier.id }}</span>
+        <span>Supplier ID: {{ supplier.supplierId }}</span>
         <strong>{{ supplier.companyName }}</strong>
       </div>
 
       <dl>
         <div>
-          <dt>Supplier Name</dt>
-          <dd>{{ supplier.supplierName }}</dd>
+          <dt>Contact Person</dt>
+          <dd>{{ supplier.contactPerson }}</dd>
         </div>
         <div>
           <dt>Age</dt>
@@ -39,6 +37,10 @@
         <div>
           <dt>City</dt>
           <dd>{{ supplier.city }}</dd>
+        </div>
+        <div>
+          <dt>Supplier Type</dt>
+          <dd>{{ supplier.supplierType }}</dd>
         </div>
         <div class="full-width">
           <dt>Address</dt>

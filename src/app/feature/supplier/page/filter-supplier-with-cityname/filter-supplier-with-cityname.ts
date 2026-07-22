@@ -15,6 +15,8 @@ export class FilterSupplierWithCityname {
   cityName = '';
   suppliers: Supplier[] = [];
   searched = false;
+  isLoading = false;
+  errorMessage = '';
 
   constructor(private supplierService: SupplierService) {}
 
@@ -26,10 +28,31 @@ export class FilterSupplierWithCityname {
       return;
     }
 
-    this.supplierService.getSuppliersByCity(city).subscribe(suppliers => {
-      this.suppliers = suppliers;
-      this.searched = true;
+    const enteredCityName = city;
+    this.isLoading = true;
+    this.errorMessage = '';
+    this.suppliers = [];
+    this.searched = false;
+
+    this.supplierService.getSuppliersByCity(enteredCityName).subscribe({
+      next: suppliers => {
+        this.suppliers = suppliers;
+        this.searched = true;
+        this.isLoading = false;
+        if (this.suppliers.length === 0) {
+          this.errorMessage = `No suppliers found for the city: ${enteredCityName}`;
+        }
+      },
+      error: error => {
+        this.suppliers = [];
+        this.searched = true;
+        this.isLoading = false;
+        if (!error.isServerError) {
+          this.errorMessage = `No suppliers found for the city: ${enteredCityName}`;
+        } else {
+          this.errorMessage = error.message;
+        }
+      }
     });
   }
-
 }

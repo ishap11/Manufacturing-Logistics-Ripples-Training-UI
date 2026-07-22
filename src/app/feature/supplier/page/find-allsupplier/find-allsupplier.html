@@ -4,17 +4,19 @@
     <p>Showing {{ suppliers.length }} supplier{{ suppliers.length === 1 ? '' : 's' }} details.</p>
   </div>
 
-  <div class="supplier-grid">
-    @for (supplier of suppliers; track supplier.id) {
+  @if (isLoading) { <p class="message">Loading suppliers...</p> }
+  @if (errorMessage) { <p class="message">{{ errorMessage }}</p> }
+  @if (!isLoading && !errorMessage) { <div class="supplier-grid">
+    @for (supplier of suppliers; track supplier.supplierId) {
       <article class="supplier-card">
         <div class="card-header">
-          <span>Supplier ID :  {{ supplier.id }}</span>
+          <span>Supplier ID : {{ supplier.supplierId }}</span>
           <strong>{{ supplier.companyName }}</strong>
         </div>
         <dl>
           <div>
-            <dt>Supplier Name</dt>
-            <dd>{{ supplier.supplierName }}</dd>
+            <dt>Contact Person</dt>
+            <dd>{{ supplier.contactPerson }}</dd>
           </div>
           <div>
             <dt>Age</dt>
@@ -28,6 +30,10 @@
             <dt>City</dt>
             <dd>{{ supplier.city }}</dd>
           </div>
+          <div>
+            <dt>Supplier Type</dt>
+            <dd>{{ supplier.supplierType }}</dd>
+          </div>
           <div class="full-width">
             <dt>Address</dt>
             <dd>{{ supplier.address }}</dd>
@@ -35,5 +41,5 @@
         </dl>
       </article>
     }
-  </div>
+  </div> }
 </section>

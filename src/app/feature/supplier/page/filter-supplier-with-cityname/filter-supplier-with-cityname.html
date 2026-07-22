@@ -11,23 +11,21 @@
     </label>
     <button type="submit">Fetch Supplier</button>
   </form>
-
-  @if (searched && suppliers.length === 0) {
-    <p class="message">No suppliers found for {{ cityName }}.</p>
-  }
+  @if (isLoading) { <p class="message">Loading suppliers...</p> }
+  @if (errorMessage) { <p class="message">{{ errorMessage }}</p> }
 
   <!-- <div class="supplier-grid">
-    @for (supplier of suppliers; track supplier.id) {
+    @for (supplier of suppliers; track supplier.supplierId) {
       <article class="supplier-card">
         <div class="card-header">
-          <span>Supplier ID: {{ supplier.id }}</span>
+          <span>Supplier ID: {{ supplier.supplierId }}</span>
           <strong>{{ supplier.companyName }}</strong>
         </div>
 
         <dl>
           <div>
-            <dt>Supplier Name</dt>
-            <dd>{{ supplier.supplierName }}</dd>
+            <dt>Contact Person</dt>
+            <dd>{{ supplier.contactPerson }}</dd>
           </div>
           <div>
             <dt>Age</dt>
@@ -41,6 +39,10 @@
             <dt>City</dt>
             <dd>{{ supplier.city }}</dd>
           </div>
+          <div>
+            <dt>Supplier Type</dt>
+            <dd>{{ supplier.supplierType }}</dd>
+          </div>
           <div class="full-width">
             <dt>Address</dt>
             <dd>{{ supplier.address }}</dd>
@@ -52,17 +54,17 @@
 
   @if (searched && suppliers.length > 0) {
     <div class="supplier-grid">
-      @for (supplier of suppliers; track supplier.id) {
+      @for (supplier of suppliers; track supplier.supplierId) {
         <article class="supplier-card">
           <div class="card-header">
-            <span>Supplier ID: {{ supplier.id }}</span>
+            <span>Supplier ID: {{ supplier.supplierId }}</span>
             <strong>{{ supplier.companyName }}</strong>
           </div>
 
           <dl>
             <div>
               <dt>Supplier Name</dt>
-              <dd>{{ supplier.supplierName }}</dd>
+              <dd>{{ supplier.contactPerson }}</dd>
             </div>
 
             <div>
@@ -78,6 +80,11 @@
             <div>
               <dt>City</dt>
               <dd>{{ supplier.city }}</dd>
+            </div>
+
+            <div>
+              <dt>Supplier Type</dt>
+              <dd>{{ supplier.supplierType }}</dd>
             </div>
 
             <div class="full-width">

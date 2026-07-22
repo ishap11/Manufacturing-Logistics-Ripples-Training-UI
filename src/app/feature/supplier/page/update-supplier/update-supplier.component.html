@@ -1,49 +1,19 @@
 <section class="supplier-page">
-  <div class="page-heading">
-    <h1>Update Supplier</h1>
-    <p>Enter the supplier ID and edit the supplier details below.</p>
-  </div>
-
-  <form class="supplier-form" #supplierForm="ngForm" (ngSubmit)="updateSupplier(supplierForm)">
-    <label class="supplier-id">
-      Supplier ID
-      <input type="number" name="supplierId" [(ngModel)]="supplierId" min="1" required />
-    </label>
-
-    <label>
-      Company Name
-      <input type="text" name="companyName" [(ngModel)]="supplier.companyName" required />
-    </label>
-
-    <label>
-      Supplier Name
-      <input type="text" name="supplierName" [(ngModel)]="supplier.supplierName" required />
-    </label>
-
-    <label>
-      Age
-      <input type="number" name="age" [(ngModel)]="supplier.age" min="18" required />
-    </label>
-
-    <label>
-      Phone
-      <input type="tel" name="phone" [(ngModel)]="supplier.phone" required />
-    </label>
-
-    <label>
-      City
-      <input type="text" name="city" [(ngModel)]="supplier.city" required />
-    </label>
-
-    <label class="full-width">
-      Address
-      <textarea name="address" rows="4" [(ngModel)]="supplier.address" required></textarea>
-    </label>
-
-    <button type="submit" class="primary-button">Update Supplier</button>
+  <div class="page-heading"><h1>Update Supplier</h1><p>Load a live supplier record, then save your changes.</p></div>
+  <div class="search-form"><label>Supplier ID<input type="number" [(ngModel)]="supplierId" name="supplierId" min="1" /></label><button type="button" (click)="loadSupplier()" [disabled]="isLoading">Load Supplier</button></div>
+  <form class="supplier-form" #supplierForm="ngForm" (ngSubmit)="updateSupplier(supplierForm)" novalidate>
+    <label [class.invalid-field]="fieldMessage(companyName, 'companyName')">Company Name<input #companyName="ngModel" name="companyName" [(ngModel)]="supplier.companyName" (ngModelChange)="clearFieldError('companyName')" minlength="3" required /> @if (fieldMessage(companyName, 'companyName')) { <small>{{ fieldMessage(companyName, 'companyName') }}</small> }</label>
+    <label [class.invalid-field]="fieldMessage(contactPerson, 'contactPerson')">Contact Person<input #contactPerson="ngModel" name="contactPerson" [(ngModel)]="supplier.contactPerson" (ngModelChange)="clearFieldError('contactPerson')" minlength="3" pattern="^[a-zA-Z\s]+$" required /> @if (fieldMessage(contactPerson, 'contactPerson')) { <small>{{ fieldMessage(contactPerson, 'contactPerson') }}</small> }</label>
+    <label [class.invalid-field]="fieldMessage(age, 'age')">Age<input #age="ngModel" type="number" name="age" [(ngModel)]="supplier.age" (ngModelChange)="clearFieldError('age')" min="18" max="70" required /> @if (fieldMessage(age, 'age')) { <small>{{ fieldMessage(age, 'age') }}</small> }</label>
+    <label [class.invalid-field]="fieldMessage(phone, 'phone')">Phone<input #phone="ngModel" name="phone" [(ngModel)]="supplier.phone" (ngModelChange)="clearFieldError('phone')" pattern="[0-9]{10}" required /> @if (fieldMessage(phone, 'phone')) { <small>{{ fieldMessage(phone, 'phone') }}</small> }</label>
+    <label [class.invalid-field]="fieldMessage(email, 'email')">Email<input #email="ngModel" type="email" name="email" [(ngModel)]="supplier.email" (ngModelChange)="clearFieldError('email')" email required /> @if (fieldMessage(email, 'email')) { <small>{{ fieldMessage(email, 'email') }}</small> }</label>
+    <label [class.invalid-field]="fieldMessage(supplierType, 'supplierType')">Supplier Type<select #supplierType="ngModel" name="supplierType" [(ngModel)]="supplier.supplierType" (ngModelChange)="clearFieldError('supplierType')" required><option value="" disabled selected>Select Supplier Type</option>@for (t of supplierTypes; track t) {<option [value]="t">{{t}}</option>}</select> @if (fieldMessage(supplierType, 'supplierType')) { <small>{{ fieldMessage(supplierType, 'supplierType') }}</small> }</label>
+    <label [class.invalid-field]="fieldMessage(city, 'city')">City<select #city="ngModel" name="city" [(ngModel)]="supplier.city" (ngModelChange)="onCityChange($event)" required [disabled]="!supplier.state"><option value="" disabled selected>Select City</option>@for (c of cities; track c) {<option [value]="c">{{c}}</option>}</select> @if (fieldMessage(city, 'city')) { <small>{{ fieldMessage(city, 'city') }}</small> }</label>
+    <label [class.invalid-field]="fieldMessage(state, 'state')">State<select #state="ngModel" name="state" [(ngModel)]="supplier.state" (ngModelChange)="onStateChange($event)" required [disabled]="!supplier.country"><option value="" disabled selected>Select State</option>@for (s of states; track s) {<option [value]="s">{{s}}</option>}</select> @if (fieldMessage(state, 'state')) { <small>{{ fieldMessage(state, 'state') }}</small> }</label>
+    <label [class.invalid-field]="fieldMessage(country, 'country')">Country<select #country="ngModel" name="country" [(ngModel)]="supplier.country" (ngModelChange)="onCountryChange($event)" required><option value="" disabled selected>Select Country</option>@for (c of countries; track c) {<option [value]="c">{{c}}</option>}</select> @if (fieldMessage(country, 'country')) { <small>{{ fieldMessage(country, 'country') }}</small> }</label>
+    <label [class.invalid-field]="fieldMessage(pincode, 'pincode')">Pincode<input #pincode="ngModel" name="pincode" [(ngModel)]="supplier.pincode" (ngModelChange)="clearFieldError('pincode')" pattern="[0-9]{6}" required /> @if (fieldMessage(pincode, 'pincode')) { <small>{{ fieldMessage(pincode, 'pincode') }}</small> }</label>
+    <label class="full-width" [class.invalid-field]="fieldMessage(address, 'address')">Address<textarea #address="ngModel" name="address" rows="4" [(ngModel)]="supplier.address" (ngModelChange)="clearFieldError('address')" required></textarea> @if (fieldMessage(address, 'address')) { <small>{{ fieldMessage(address, 'address') }}</small> }</label>
+    <button type="submit" class="primary-button" [disabled]="isLoading">{{ isLoading ? 'Saving...' : 'Update Supplier' }}</button>
   </form>
-
-  @if (message) {
-    <p class="message">{{ message }}</p>
-  }
+  @if (message) { <p class="message">{{ message }}</p> } @if (errorMessage) { <p class="message error-message">{{ errorMessage }}</p> }
 </section>

@@ -15,6 +15,8 @@ export class FindSupplierWithid {
   supplierId: number | null = null;
   supplier?: Supplier;
   searched = false;
+  isLoading = false;
+  errorMessage = '';
 
   constructor(private supplierService: SupplierService) {}
 
@@ -25,10 +27,28 @@ export class FindSupplierWithid {
       return;
     }
 
-    this.supplierService.getSupplierById(this.supplierId).subscribe(supplier => {
-      this.supplier = supplier;
-      this.searched = true;
+    const enteredId = this.supplierId;
+    this.isLoading = true;
+    this.errorMessage = '';
+    this.supplier = undefined;
+    this.searched = false;
+
+    this.supplierService.getSupplierById(enteredId).subscribe({
+      next: supplier => {
+        this.supplier = supplier;
+        this.searched = true;
+        this.isLoading = false;
+      },
+      error: error => {
+        this.supplier = undefined;
+        this.searched = true;
+        this.isLoading = false;
+        if (!error.isServerError) {
+          this.errorMessage = `No supplier found with ID: ${enteredId}`;
+        } else {
+          this.errorMessage = error.message;
+        }
+      }
     });
   }
-
 }
